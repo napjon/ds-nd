@@ -1,0 +1,47 @@
+
+* Hypothesis testing : is there a difference between romney and obama proportion
+* Estimate the difference proportion between obama and romney
+* Independence checked. Already drop duplicate same zipcode. This gives us two advantage:
+  * We only pick unique financial contributors.
+  * There's might be more than one familly members(e.g. husband and wife)  financially contributing. They'll more likely contribute to same candidates. Droping duplicated zip codes eliminate this problem.
+  * TODO(Random Sampling Permutation from 10% population)
+  
+Using inference from DASI
+
+```{r}
+source("http://bit.ly/dasi_inference")
+```
+
+I observed the 
+```{r}
+#Group the the database by zip code, and see which has the longest count, pick that
+dftable5 = group_by(rb_zip, contbr_zip) %>%
+  filter(nchar(contbr_zip) == 5) %>%
+  summarise(count=n()) %>%
+  arrange(count)
+
+table(subset(rb_zip, rb_zip$contbr_zip == "100242605"))
+```
+
+For this particular area (observed level from zipcode proportion), is there any difference of proportion between Romney and Obama?
+
+```{r}
+onezipcodes = subset(rb_zip, rb_zip$contbr_zip == "100242605")
+inference(onezipcodes$cand_nm,
+          est="proportion",
+          type="ht",
+          method="theoretical",
+          success="Obama, Barack",
+          null = 0.5,
+          alternative="twosided",
+          eda_plot=F)
+```
+
+
+
+
+
+So I got an error, I expect this code means I've got huge infinity. I can see that my test statistic is more than 10 standard deviation, and p-value equals zero. This result answers my research question, "is majority of New York contributors in 2012 support Obama?". Hence I reject my null hypothesis and favor the alternative. This data provide convincing evidence that majority of New York contributors in 2012 support Obama.
+
+
+The reason why I don't take simple random sampling to choose the zipcode, because there's so many zipcodes that has zero contributor to Romney. The p-value will of course zero. So I group the zipcodes and observed the one with largest contributors. Even so Romney's contributors is still missing.So I observe by descending order, and found 100242605. This also meet success-failure condition. I also don't interpret 100242605 to which area in New York. I apply blinding to myself to make a fair judgement.

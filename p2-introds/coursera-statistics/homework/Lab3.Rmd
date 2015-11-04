@@ -1,0 +1,213 @@
+---
+title: "Lab3"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+load(url("http://www.openintro.org/stat/data/ames.RData"))
+head(ames)
+````
+
+We see quite a view variables, so we focused just on the two variables.
+
+```{r}
+area <- ames$Gr.Liv.Area
+price <- ames$SalePrice
+```
+
+Looking summary of area:
+
+```{r}
+summary(area)
+hist(area)
+
+```
+
+Often population data can't be gathered. Here we use sample function to get a sense of getting one sample of one population
+
+
+```{r}
+samp0 = sample(area,50)
+samp1 = sample(area,50)
+samp0 == samp1
+mean(samp1)
+```
+
+Here we have take 2 sample from the population, and they have different distribution. It's often useful on how we can measure the variability of samples that we've taken with same size taken from the same population. The distribution of sample means is called **Sampling Distribution**. Below is the code to make distributions of 5000 sample means.
+
+
+```{r}
+#NA in R is None in Python. Perform as placeholder for this initialization array.
+#In other words, create 5000 size of empty array.
+sample_means50 = rep(NA,5000)
+
+
+for (i in 1:5000)
+  {
+    sample_means50[i] = mean(sample(area,50))
+  } 
+
+hist(sample_means50)
+summary(sample_means50)
+```
+
+Here we have plot the Sampling Distribution. As you can see that in the sampling distribution, it's perform normal distribution, unimodal. And not strange enough, it's centered around the mean of the true population.This code will create small version of sample_means
+
+```{r}
+sample_means_small = rep(NA, 100)
+
+for (i in 1:100){
+  sample_means_small[i] = mean(sample(area,50))
+}
+sample_means_small
+```
+
+
+```{r}
+sample_means10 = rep(NA,5000)
+sample_means100 = rep(NA,5000)
+
+for (i in 1:5000){
+  sample_means10[i] = mean(sample(area,10))
+  sample_means100[i] = mean(sample(area,100))
+}
+```
+
+We can see difference of the distribution by plotting all three sample means different size
+
+```{r}
+#Setting all plotting to facet by three rows and one columns. 
+# To return to default, specify 1,1 again
+par(mfrow = c(3,1))
+
+#This to ensure that following plots will be equal x-limits, so we can observe easily.
+xlimits =range(sample_means10)
+
+#breaks specify the number of your bins
+hist(sample_means10, breaks = 20, xlim = xlimits)
+hist(sample_means50, breaks = 20, xlim = xlimits)
+hist(sample_means100, breaks = 20, xlim = xlimits)
+
+par(mfrow=c(1,1))
+```
+
+Now for the means:
+
+```{r}
+summary(sample(price,50))
+```
+
+Based on this data, I expect the true mean price of population to be $166.900
+
+```{r}
+
+sample_means50 = rep(NA,5000)
+sample_means150 = rep(NA,5000)
+
+for (i in 1:5000){
+  sample_means50[i] = mean(sample(price,50))
+  sample_means150[i] = mean(sample(price,150))
+}
+
+par(mfrow=c(2,1))
+
+xlimit = range(sample_means50)
+hist(sample_means50, breaks = 20,xlim = xlimit)
+hist(sample_means150, breaks = 20,xlim = xlimit)
+
+```
+
+
+Often the data you have not represent the whole population. So what you want to do is take a sample and infer the population parameter. Let's take area of the ames variable.
+
+```{r}
+population = ames$Gr.Liv.Area
+samp = sample(population,60)
+hist(samp)
+```
+
+In this plot, the sample seems to be not a good representative enough, but still good estimate.
+
+
+##Confidence Interval
+
+One typical case to describe the center of the distribution is the mean. So let's save that.
+
+```{r}
+sample_mean = mean(samp)
+```
+
+Since the mean of the sample is unbiased, it can be used as **point estimate** of true average area of house sold in Ames, population. But we also want to see what are the uncertainty range of population parameters. This often called **Confidence Interval**.
+
+```{r}
+#This will calculate standard error of sampling distribution. It will take sd of sample (point estimate of sd population). 
+se = sd(samp)/sqrt(60)
+
+#We configure the upper and lower bound. Since we need 95%, we need 1.96 for the standard deviation, and compute by following formula.
+upper = sample_mean + 1.96 * se
+lower = sample_mean - 1.96 * se
+
+c(lower,upper)
+```
+
+We are able knowing the mean population since we have the whole data.
+
+```{r}
+mean(population)
+```
+
+Sample means and confidence intervals can be vary each time we take a sample. In the following, we will take simulation taking sample 50 times.
+
+```{r}
+# Initialization of placeholders
+samp_mean = rep(NA,50)
+samp_sd = rep(NA,50)
+n = 60
+
+#Repeat the following 50 times.
+#1. take random sample
+#2. Save the the sample mean
+#3. Save the sample standard deviation.
+
+for (i in 1:50){
+  samp = sample(population, n)
+  samp_mean[i] = mean(samp)
+  samp_sd[i] = sd(samp)
+}
+
+```
+
+After that, we plot confidence intervals for all the sample and standard deviation. And see which of the interval that don't capture the true mean population.
+
+```{r}
+#This will compute vectorize implementation for array samp_mean and samp_sd
+lower = samp_mean - 1.96 * samp_sd / sqrt(n)
+upper = samp_mean + 1.96 * samp_sd / sqrt(n)
+
+c(lower[1],upper[1])
+
+plot_ci(lower,upper,mean(population))
+```
+
+We can see that our samples interval accurate to capture true population mean 56/60(93% capture the true population mean). This occurs because we take a random sample, produce different mean and different confidence interval.Hence,sometimes it doesn't capture it.How about we increase it to 99% confidence interval? the z-critical can be obtained by(convert to positive value):
+
+```{r}
+qnorm(0.005)
+```
+
+Using same sample means, and same sample sds earlier
+
+```{r}
+upper = samp_mean + 2.58 * samp_sd
+lower = samp_mean - 2.58 * samp_sd
+
+plot_ci(lower,upper,mean(population))
+```
+
+
+Here we see by expanding the level of confidence, we also increase width of the interval, hence each of the sample confidence interval capture the true population mean with 100% accuracy.
+

@@ -1,0 +1,40 @@
+
+In this section I use hypothesis testing to see whether there is a relationship between neighborhood of contributors to candidates they're contributing. I set my hypothesis as follows:
+
+* H0 : neighborhood and candidates are independent.
+* HA : neighborhood and candidates are dependent.
+
+Next, I make a simple random sampling one zipcode from data,
+
+```{r}
+set.seed(123456)
+subset(rb_zip,nchar(contbr_zip) == 9)[sample(1:length(rb_zip$contbr_zip), 1),]$contbr_zip
+```
+
+What I got here is "100242605".For neighborhood, I get all zipcodes with prefix "10024260". 
+
+```{r}
+inftab = rb_zip[grepl("10024260",rb_zip$contbr_zip),]
+by(inftab, inftab$cand_nm,table)
+```
+
+Even if I don't check size for each cell, I would know that the sample size is very small, and indeed less than 10% population. So I would use simulation based test. Each cell also belong to only one cell, there's no contributors that support financially two candidates, and live two place in one neighborhood.
+
+```{r}
+source("http://bit.ly/dasi_inference")
+inftab$contbr_zip = as.factor(inftab$contbr_zip)
+inference(y = inftab$cand_nm,
+          x = inftab$contbr_zip,
+          est="proportion",
+          type="ht",
+          method="simulation",
+          success="Obama, Barack",
+          alternative="greater",
+          eda_plot=F,
+          nsim=10000)
+```
+
+The p-value is practically 1 in simulation test. Thus using 5% significance level, I failed to reject the null hypothesis, and conclude that the data provide convincing evidence that in 2012 presidential election, financial contributors' neighborhood and the candidates they're contributing are independent.
+
+Here the method used is chi-square independence test, since there are no other methods to choose when testing relationship of categorical variables, across several groups. Hypothesis testing simulation based is chosen because the sample size is too small(in particular, for Romney).
+
