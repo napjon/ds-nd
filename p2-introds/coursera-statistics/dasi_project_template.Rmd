@@ -1,0 +1,199 @@
+---
+title: "Research of 2012 US president financial contributors based on their neighborhood"
+output:
+  html_document:
+    theme: cerulean
+  pdf_document: default
+  word_document: default
+date: "2016 April, 16"
+---
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.width=12, fig.height=8,
+               echo=TRUE, warning=FALSE, message=FALSE)
+```
+### Introduction:
+
+Research question : Does there appear to be a relationship between 2012 US presidential candidates with their financial contributors' neighborhood? 
+
+Candidates for presidential election need donations from contributors to run a campaign.You have seen result of votes for New York and its cities.But state and city are too general to make a conclusion. This research will dive deep into the neighborhood level and analyze whether or not there is a correlation between neighborhood and the candidates.
+
+
+
+### Data:
+
+This data is collected from Federal Election Commission, http://www.fec.gov/ . This is an official US government website, and write detail about 2012 US presidential election.This data has contributors' identity such as id,name,occupation,city,status, employer, contribution amount, etc.This data can be downloaded at this [link](ftp://ftp.fec.gov/FEC/Presidential_Map/2012/P00000001/P00000001-NY.zip).This is a must written survey by all contributors that want to donate for candidates' campaign.
+
+One contributor can submit more than once. Since I only pay attention to the contributors only, I drop dupplicate the contributors, so the cases are 378562 unique contributors. The variables that will be focused on are contributors' zipcodes(categorical, various levels) and candidate name(categorical, various levels).
+
+This is an observational study. The data is collected from must filled survey by contributors,not computer, as there's some city that is the same but two different things ("North Hills, " vs "North Hills"). There are total of 2207 cities in dataset as opposed to 62 New York cities the original number.
+
+It can generalized to all New York financial contributions in 2012, but only for those New Yorkers that contribute to presidential election. This data can't be generalized to others that perhaps not enough money to contribute, or other  reasons. This can be some extraneous variables that prevent the survey to generalize to New York population. This data is taken, 2012 vs all years financial contributions. 2016 presidential election will have different candidates, and thus will vary greatly.We can't make a causality based on the fact that this is observational study.
+
+### Exploratory data analysis:
+
+Library that I will be using are:
+
+```{r}
+library(ggplot2)
+library(ggmap)
+library(zipcode)
+library(dplyr)
+data(zipcode)
+```
+
+The data is loaded to the dataframe, and I just want to to observe for two main candidate, Obama and Romney.
+
+```{r}
+df = read.csv("fc2012ny.csv")
+
+#Row wise, drop duplicated zip codes. And subsetting for two main candidates, Obama and Romney
+#Column wise, selecting only two variable required, 3=cand_nm, 7=contbr_zip
+rb_zip = subset(df[!duplicated('contbr_zip'),c(3,7)],
+                cand_nm == 'Romney, Mitt' |
+                cand_nm == 'Obama, Barack')
+#Redefined the factor levels to only 2
+rb_zip = droplevels(rb_zip)
+```
+
+This plot will show how many contributors for Obama and Romney.
+
+```{r}
+#Plotting by ggplot
+ggplot(rb_zip,aes(x=cand_nm)) + geom_bar() +
+  xlab('Candidate names')+
+  ylab('Number of contributors')+
+  ggtitle('Contributors for candidates presidential election 2012')+
+  ggsave('plot.jpg',limitsize = T)
+```
+
+Even when I'm doing bar chart. You can see Obama has almost 10 times contributors than Romney's.With this many contributors, Obama has more freedom to run his campaign compared to Romney.Below is the contigency table for Obama and Romney,
+
+```{r}
+table(rb_zip$cand_nm)
+```
+
+To help me with analysis, I use the cool zipcode package library from Jeffrey Breen. I extract the latitude, longitude and city (I did not use city in the df dataset, because it need some wrangling.) Since some of the people only fill 5 prefix zipcodes, I convert all of them into 5 prefix zipcodes. Then I use color to differentiate both candidates. Below I use another awesome plot package, ggmap by David Kahle and Hadley Wickham.
+
+```{r}
+#Clean and join the zipcode data, by Jeffrey Breen, author of R zipcode package.
+rb_zip$contbr_zip = clean.zipcodes(rb_zip$contbr_zip)
+zip_map= merge(rb_zip, zipcode, by.x = 'contbr_zip', by.y = 'zip')
+
+#Draw original map of new york
+map = get_map(location="ny",zoom=6,source="stamen")
+#Plot the point
+ggmap(map)+
+  geom_point(data=zip_map,
+             aes(x=longitude,y=latitude,colour=cand_nm))
+ 
+```
+
+Here we see that most of the contributors favor Obama over Romney. The plot is overplotting though. I'm going to limit based on the majority area of the contributors. Based on the plot, I can see that I may have pretty good estimate, If I limit latitude between 40 to 45, and longitude between -80 to -72. 
+
+```{r}
+zip_map.filtered = subset(zip_map,
+                          !is.na(longitude) & 
+                          !is.na(latitude) &
+                          latitude > 40 & latitude < 45 &
+                          longitude > -80 & longitude < -72)
+```
+
+Since I have so many category levels in the zip code. I group them based on the coordinate, round based on nearest integers. Then for each group, take the average of latitude and longitude. I create buble chart in the map. The higher the bubble, the higher the population in the area. I also have sequential colors that describe difference between obama and romney contributors. More blue means more contributors to Obama, brown means both contributors are roughly equal.
+
+```{r}
+zip_map.by_coor = group_by(zip_map.filtered,round(latitude),round(longitude))%>%
+  summarise(latmean = mean(latitude),
+            lonmean = mean(longitude),
+            OfromR = table(cand_nm)["Obama, Barack"] - table(cand_nm)["Romney, Mitt"],
+            count = n()) %>%
+  ungroup()
+
+#Create the ggmap,
+# map =background of New York, stamen
+# x = longitude
+# y = latitude
+# color = difference of Obama to Romney
+# alpha = darker per 20 count
+# size = based on the population in the area
+# Color palette from Red to Blu
+ggmap(map,fullpage = T)+
+  geom_point(data=zip_map.by_coor,
+             aes(x=lonmean,y=latmean,
+                 colour=OfromR,
+                 alpha=1/20,
+                 size =count))+scale_size_area(max_size=50,breaks=c(1000,5000,10000,50000),guide=F)+
+  scale_colour_distiller(palette = 'RdBu',
+                         guide=guide_legend(title="difference contributors"))+
+  scale_alpha(guide=F)+
+  ggtitle('Map of New York contributors in 2012, for Obama and Romney')
+```
+
+Here we can see that majority of the contributors live in New York, the rest is live around New York.  Contributors in NY have sided with Obama the most than other area. This could also happen because this area have the highest population.Contributors in similar area(represented by its longtitude and latitude) have roughly equal differrence. But once again, this could also happen because it's too small to notice the difference.We can't observe the neighborhood in this level.But this still serve as a good estimate of difference contributors across similar area.
+
+### Inference:
+
+In this section I use hypothesis testing to see whether there is a relationship between neighborhood of contributors to candidates they're contributing. I set my hypothesis as follows:
+
+* H0 : neighborhood and candidates are independent.
+* HA : neighborhood and candidates are dependent.
+
+Earlier, I have drop-duplicated zipcodes in the dataset. The reason I choose to do this is because of I want the observations to be independent, and it will impact two factors:
+
+* We only pick unique financial contributors.There could be a donor that contributing twice. 
+* There's might be more than one familly members(e.g. husband and wife)  financially contributing. They'll more likely contribute to same candidates. Droping duplicated zip codes eliminate this problem.
+
+Next, I make a simple random sampling one zipcode from data,
+
+```{r}
+set.seed(123456)
+subset(rb_zip,nchar(contbr_zip) == 9)[sample(1:length(rb_zip$contbr_zip), 1),]$contbr_zip
+```
+
+What I got here is "100242605".For neighborhood, I get all zipcodes with prefix "10024260". 
+
+```{r}
+inftab = rb_zip[grepl("10024260",rb_zip$contbr_zip),]
+by(inftab, inftab$cand_nm,table)
+```
+
+Even if I don't check size for each cell, I would know that the sample size is very small, there are several cells that can't exceed 5, not meet success-failure condition, and indeed less than 10% population. So I would use simulation based test. Each cell also belong to only one cell, there's no contributors that support financially two candidates, and live two place in one neighborhood.
+
+```{r}
+
+source("http://bit.ly/dasi_inference")
+inftab$contbr_zip = as.factor(inftab$contbr_zip)
+inference(y = inftab$cand_nm,
+          x = inftab$contbr_zip,
+          est="proportion",
+          type="ht",
+          method="simulation",
+          success="Obama, Barack",
+          alternative="greater",
+          eda_plot=F,
+          nsim=10000)
+```
+
+The p-value is practically 1 in simulation test. Thus using 5% significance level, I failed to reject the null hypothesis, and conclude that the data provide convincing evidence that in 2012 presidential election, financial contributors' neighborhood and the candidates they're contributing are independent.
+
+Here the method used is chi-square independence test, since there are no other methods to choose when testing relationship of categorical variables, across several groups. Hypothesis testing simulation based is chosen because the sample size is too small(in particular, for Romney).
+
+### Conclusion:
+
+So where will this left us? Well we know for the fact that even the closest level area, neighborhood is not correlated on how people financially contributing candidates in 2012 US Election. So we can't even judge state/city level to favorite one candidate over the others.
+
+There's still another potential lurking variable that we may have to pay attention. We know that family, workplace, candidates's opinion can be a factor of contributors to choose. Neighborhood is more likely not as a significant factor, but one can't simply ignore this variable.
+
+Things can be done with more accurately. For example, we could group zip code and their donations, see which neighborhood has large donations, vs those with small donations. This could be beneficial for candidates, regardless whoever they be, they could run a campaign in that area. The buble chart for map can also incorporate donations. Buble size is not vary by the population anymore, but by the donations. That way we know how big the donations for particular area, and color the difference of donations between two main candidates. 
+
+>  **References:**
+
+> * [dataset from FEC](ftp://ftp.fec.gov/FEC/Presidential_Map/2012/P00000001/P00000001-NY.zi)
+> * [D. Kahle and H. Wickham. ggmap: Spatial Visualization with ggplot2. The R Journal, 5(1), 144-161](http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf)
+> * [Jeffrey Breen. zipcode](http://cran.r-project.org/web/packages/zipcode/zipcode.pdf)
+
+### Appendix
+
+```{r}
+head(rb_zip, n=47L)
+```

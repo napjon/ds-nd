@@ -1,0 +1,25 @@
+
+
+                         Medical Studies        Not PreMedical     Total
+Social Science                  6                   
+NotSocial Science
+
+
+
+S = college graduate that taken online course
+
+P(OC) = 0.23
+P(NotOC) = 0.77
+P(Believe & Take OC) = 0.39
+P(Believe * Not Take OC) = 0.27
+
+OC 0.23   Believe 0.39        
+          Not Believe 0.61 --> 0.1403
+          
+NotOC 0.77  Believe 0.27
+            Not Believe 0.73 --> 0.5621
+            
+            
+            
+P(k>=1) = 0.61
+p(k=0) = 0.39

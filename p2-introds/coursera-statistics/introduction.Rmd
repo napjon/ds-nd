@@ -1,0 +1,5 @@
+Research question : Does there appear to be a relationship between 2012 US presidential candidates with their financial contributors' neighborhood? 
+
+Candidates for presidential election need donations from contributors to run a campaign.You have seen result of votes for New York and its cities.But state and city are too general to make a conclusion. This research will dive deep into the neighborhood level and analyze whether or not there is a correlation between neighborhood and the candidates.
+
+
