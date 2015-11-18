@@ -31,13 +31,6 @@ mapping = {
             'Jl':'Jalan',
         
         }
-# mapping = { 
-#             "Ave":"Avenue",
-#             "St.": "Street",
-#             "Rd." : "Road",
-#             "N.":"North",
-#             "St" : "Street",
-#             }
 
 
 def audit_street_type(street_types, street_name):
@@ -84,6 +77,10 @@ def audit(osmfile):
                 elif is_name_is_street(tag):
                     tag.attrib['v'] = update_name(tag.attrib['v'],mapping)
                     n_add = tag.attrib['v']
+                elif tag.attrib['k'] == 'phone':
+#                     print  tag.attrib['v']
+                    tag.attrib['v'] = update_phone(tag.attrib['v'])
+                    
                    
             if n_add:
                 elem.append(ET.Element('tag',{'k':'addr:street', 'v':n_add}))
@@ -94,7 +91,19 @@ def audit(osmfile):
     tree.write(osmfile[:osmfile.find('.osm')]+'_audit.osm')
     return street_types
 
-
+def update_phone(number):
+    """Uniform all the incosistent number"""
+    
+    stripped = re.sub('[^A-Za-z0-9]+', '', number)
+    replace0to62 = re.sub('^0', '62',stripped)
+    separate_area_code  = re.sub('^6221','6221 ',replace0to62)
+    tidy_country_code = re.sub('^62', '+62 ', separate_area_code )
+    fixed = tidy_country_code
+    
+    return fixed
+        
+    
+    
 def update_name(name, mapping):
     """
     Fixed abreviate name so the name can be uniform.
@@ -115,20 +124,20 @@ def update_name(name, mapping):
 
 def test():
     st_types = audit(OSMFILE)
-    pprint.pprint(dict(st_types))
+#     pprint.pprint(dict(st_types))
     #assert len(st_types) == 3
     
 
-    for st_type, ways in st_types.iteritems():
-        for name in ways:
-            better_name = update_name(name, mapping)
-            print name, "=>", better_name
+#     for st_type, ways in st_types.iteritems():
+#         for name in ways:
+#             better_name = update_name(name, mapping)
+#             print name, "=>", better_name
 
 
 if __name__ == '__main__':
-#     test()
-    parser  = OptionParser()
-    parser.add_option('-d', '--data', dest='audited_data', help='osm data that want to be audited')
-    (opts,args) = parser.parse_args()
-    audit(opts.audited_data)
+    test()
+#     parser  = OptionParser()
+#     parser.add_option('-d', '--data', dest='audited_data', help='osm data that want to be audited')
+#     (opts,args) = parser.parse_args()
+#     audit(opts.audited_data)
     
