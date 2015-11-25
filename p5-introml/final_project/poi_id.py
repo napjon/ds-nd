@@ -11,44 +11,41 @@ sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 from visualize_new_feature import update_with_fraction_poi
-### Task 1: Select what features you'll use.
+
 
 
 ### Load the dictionary containing the dataset
 data_dict = pickle.load(open('final_project_dataset.pkl', "r") )
+
 ## Task 2: Remove outliers
 data_dict.pop('TOTAL')
 
 ### Task 3: Create new feature(s)
-data_with_fraction_poi = update_with_fraction_poi(data_dict)
+data_with_fraction_poi = update_with_fraction_poi(data_dict)#Update dataset with fraction poi
 
 
+df = pd.DataFrame.from_dict(data_with_fraction_poi,orient='index') #create pandas Dataframe from dataset
 
-
-df = pd.DataFrame.from_dict(data_with_fraction_poi,orient='index')
-
-cols = df.columns.tolist()
+cols = df.columns.tolist() # get the list of features
 cols.remove('email_address')#remove non numeric features
 cols.remove('poi')# remove labels
-impute = df[cols].copy()
-impute = impute.applymap(lambda x: 0  if x == 'NaN' else x)
+impute = df[cols].copy().applymap(lambda x: 0  if x == 'NaN' else x) #replace NaN features as 0
 
-# scaled = impute.apply(MinMaxScaler().fit_transform)
-scaled = impute
+scaled = impute.apply(MinMaxScaler().fit_transform) #Scaled each of the feature 
 
-selPerc = SelectPercentile(f_classif,percentile=30)
-selPerc.fit(scaled,df['poi'])
+selPerc = SelectPercentile(f_classif,percentile=21) # Built the SelectPercentile, 21 Selected Based on the Performance
+selPerc.fit(scaled,df['poi']) # Learn the Features, knowing which features to use
 
-features_percentiled = scaled.columns[selPerc.get_support()].tolist()
-scaled['poi'] =df['poi']
+features_percentiled = scaled.columns[selPerc.get_support()].tolist() #Filter columns based on what Percentile support
+scaled['poi'] = df['poi'] #rejoin the label
 
 
 ### Store to my_dataset for easy export below.
-my_dataset = scaled.to_dict(orient='index')
+my_dataset = scaled.to_dict(orient='index') #change the dataframe back to dictionary
 
+### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-
 features_list = ['poi'] + features_percentiled # You will need to use more features
 
 ### Extract features and labels from dataset for local testing
@@ -62,9 +59,13 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB,MultinomialNB
-from sklearn.linear_model import SGDClassifier
+from sklearn.naive_bayes import GaussianNB ##Default: Precision: 0.50158	Recall: 0.39600, BEST!
+from sklearn.tree import DecisionTreeClassifier ##Default: Precision: 0.14830	Recall: 0.05450
+from sklearn.ensemble import RandomForestClassifier ##Default: Precision: 0.47575	Recall: 0.20600, Longer time
+from sklearn.linear_model import SGDClassifier ##Default: Precision: 0.29148	Recall: 0.22400
+
 clf = GaussianNB()
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
