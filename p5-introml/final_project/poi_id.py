@@ -5,13 +5,14 @@ import pickle
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_selection import SelectPercentile,f_classif
+from sklearn.feature_extraction.text import TfidfVectorizer,CountVectorizer
 
-sys.path.append("../tools/")
+sys.path.append("../tools")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 from visualize_new_feature import update_with_fraction_poi
-
+from vectorize_text import get_word_data_from_email
 
 
 ### Load the dictionary containing the dataset
@@ -24,7 +25,8 @@ data_dict.pop('TOTAL')
 data_with_fraction_poi = update_with_fraction_poi(data_dict)#Update dataset with fraction poi
 
 
-df = pd.DataFrame.from_dict(data_with_fraction_poi,orient='index') #create pandas Dataframe from dataset
+full_df = pd.DataFrame.from_dict(data_with_fraction_poi,orient='index') #create pandas Dataframe from dataset
+df = full_df[full_df.email_address != 'NaN']
 
 cols = df.columns.tolist() # get the list of features
 cols.remove('email_address')#remove non numeric features
@@ -39,14 +41,26 @@ selPerc.fit(scaled,df['poi']) # Learn the Features, knowing which features to us
 features_percentiled = scaled.columns[selPerc.get_support()].tolist() #Filter columns based on what Percentile support
 scaled['poi'] = df['poi'] #rejoin the label
 
+###### Add Text Learning####
+word_data = df['email_address'].apply(get_word_data_from_email) # Extract words given email
+vect = TfidfVectorizer(stop_words='english',max_df=0.4,min_df=0.33) # Build the vectorizer
+vect.fit(word_data) # Vectorizer Learn from data
+words = vect.vocabulary_.keys() # what words to used
+vectorized_words = vect.transform(word_data).toarray()# The values of vectorized words
+df_docs = pd.DataFrame(vectorized_words, 
+                       columns=words,
+                       index=df.index) # Using same index, person
+df_with_data = pd.concat([df_docs,scaled],axis=1) # Concat emails with numerical features
+############################
 
 ### Store to my_dataset for easy export below.
-my_dataset = scaled.to_dict(orient='index') #change the dataframe back to dictionary
+my_dataset = df_with_data.to_dict(orient='index') #change the dataframe back to dictionary
+# my_dataset = scaled.to_dict(orient='index') #change the dataframe back to dictionary
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi'] + features_percentiled # You will need to use more features
+features_list = ['poi'] + features_percentiled  + words# You will need to use more features
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
@@ -59,13 +73,33 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB ##Default: Precision: 0.50158	Recall: 0.39600, BEST!
+from sklearn.naive_bayes import GaussianNB ##Default(Tuned): Precision: 0.29453	Recall: 0.43650, BEST!
 from sklearn.tree import DecisionTreeClassifier ##Default: Precision: 0.14830	Recall: 0.05450
 from sklearn.ensemble import RandomForestClassifier ##Default: Precision: 0.47575	Recall: 0.20600, Longer time
-from sklearn.linear_model import SGDClassifier ##Default: Precision: 0.29148	Recall: 0.22400
+from sklearn.linear_model import SGDClassifier ##Tuned: Precision: 0.36853	Recall: 0.35950, BEST
+
+# from sklearn.pipeline import Pipeline
+# text_clf = Pipeline([('vect', TfidfVectorizer()),
+#                       ('clf', SGDClassifier(loss='hinge', penalty='l2',
+#                                             alpha=1e-3, n_iter=5, random_state=42)),
+# ])
+
+# from sklearn.grid_search import GridSearchCV
+# parameters = {'vect__ngram_range': [(1, 1), (1, 2)],
+#                'clf__alpha': (1e-2, 1e-6),
+# }
+
+# # gs_clf = GridSearchCV
+# clf = GridSearchCV(text_clf,parameters)
+
+# clf = SGDClassifier(loss='hinge',
+#                     penalty='l2',
+#                     alpha=1e-6,
+#                     n_iter=31,
+#                     n_jobs=-1,
+#                     random_state=42)
 
 clf = GaussianNB()
-
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project

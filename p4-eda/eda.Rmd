@@ -1,0 +1,147 @@
+---
+title: "EDA on Prosper Loan Data"
+author: "Napitupulu Jon"
+date: "November 27, 2015"
+output: html_document
+---
+
+
+Due to many variables in this dataset, I only use 13 variables. Those are:
+
+* CreditGrade: The Credit rating that was assigned at the time the listing went live. Applicable for listings pre-2009 period and will only be populated for those listings.
+
+
+* ProsperRating(Alpha): The Prosper Rating assigned at the time the listing was created between AA - HR.  Applicable for loans originated after July 2009.
+
+
+* IsBorrowerHomeowner: A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
+
+* StatedMonthlyIncome: The monthly income the borrower stated at the time the listing was created.
+
+
+* ProsperPaymentsOneMonthPlusLate: 	Number of payments the borrower made on Prosper loans that were greater than one month late at the time they created this listing. This value will be null if the borrower had no prior loans.
+
+* LoanOriginalAmount:	The origination amount of the loan.
+
+* LoanOriginationDate:	The date the loan was originated.
+
+* PercentFunded:	Percent the listing was funded.
+
+* Term:	The length of the loan expressed in months.
+
+* Occupation:	The Occupation selected by the Borrower at the time they created the listing.
+
+```{r global_options,include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+df = subset(read.csv('dataset/prosperLoanData.csv'), 
+            select=c('CreditGrade', 
+                          'LoanStatus',
+                          'BorrowerRate',
+                          'ProsperRating..Alpha.',
+                          'ListingCategory..numeric.',
+                          'IsBorrowerHomeowner',
+                          'StatedMonthlyIncome',
+                          'Recommendations',
+                          'ProsperPaymentsOneMonthPlusLate',
+                          'LoanOriginalAmount',
+                          'PercentFunded',
+                          'Term',
+                          'Occupation'))
+head(df)
+```
+
+## Univariate Plot Section
+
+```{r}
+summary(df$Recommendations)
+table(df$Recommendations)
+```
+
+Recommendations: Number of recommendations.
+
+This is the number of recommendations that Borrowers have when listing the loans. We can see that the number of the recommendations is right skewed, with the mean 0.04, which in average borrower doesn't has many number of recommendations. And it goes as high as 39 recommendations for just one borrower.
+
+```{r}
+summary(df$LoanStatus)
+```
+
+LoanStatus: The current status of the loan: Cancelled,  Chargedoff, Completed, Current, Defaulted, FinalPaymentInProgress, PastDue. The PastDue status will be accompanied by a delinquency bucket.
+
+Many of the loan status in this dataset are still running, loan completd comes second with 38074 unit. There are also loan status that past due about 2000 loans.
+
+```{r}
+ggplot(df,aes(x=BorrowerRate)) + geom_histogram()
+```
+
+BorrowerRate: The Borrower's interest rate for this loan. 
+
+The borrower's rate follow almost unimodal distribution, with peak around 0.16. There's spike occurs, around 0.3, but doesn't make enough to be second peak. 
+
+```{r}
+table(df$ProsperRating..Alpha.)
+```
+
+ProsperRating(Alpha): The Prosper Rating assigned at the time the listing was created between AA - HR.  Applicable for loans originated after July 2009.
+
+The Rating could also be null, if the Prosper system can't rate the loan. And about 29084 loans can't rated by Prosper, which means that the loans originated before July 2009. The number of rating almost follow the order of the rating, except A-grade is the highest number of rating, AA comes second, and the rest following the order.
+
+```{r}
+table(df$ListingCategory..numeric.)
+```
+
+ListingCategory: The category of the listing that the borrower selected when posting their listing: 0 - Not Available, 1 - Debt Consolidation, 2 - Home Improvement, 3 - Business, 4 - Personal Loan, 5 - Student Use, 6 - Auto, 7- Other, 8 - Baby&Adoption, 9 - Boat, 10 - Cosmetic Procedure, 11 - Engagement Ring, 12 - Green Loans, 13 - Household Expenses, 14 - Large Purchases, 15 - Medical/Dental, 16 - Motorcycle, 17 - RV, 18 - Taxes, 19 - Vacation, 20 - Wedding Loans
+
+Out of the listing category, three categories comes out the highest past 10.000 loans. There's N/A and Other categories, so we can't know for sure the specific category. But the highest is 1, which is Debt Consolidation, where's one take out a loan to pay many others. This comes really high with 58308 loans, overshadowing the rest of the categories. It could be that many Prosper visitors comes with already have loans, and want to search some loans to pay for it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Let's plot borrowers' rate with their monthly income 
+
+```{r}
+ggplot(df,aes(x=BorrowerRate, y=StatedMonthlyIncome)) + geom_point()
+```
+
+I can see that it doesn't have any correlation linearly in the plot. As the rate is moving up, the income of the borrowers isn't affected. So no matter how much money people have doesn't affected by the rate people are given.
+
+```{r}
+ggplot(df,aes(x=StatedMonthlyIncome)) +
+  geom_histogram(bin=20)+
+  xlim(c(0,quantile(df$StatedMonthlyIncome,0.95))) +
+  scale_y_continuous(trans = "log10")
+```
+
+Monthly Income will definitely be right skewed, since fewer people will have higher salary. So I cut off the salary above 95% and plot it. If we see in the plot, we notice there's spike everywhere in the histogram. But overall we see that the data has wide distribution.
+
+```{r}
+table(df$IsBorrowerHomeowner)
+ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + geom_boxplot()
+```
+
+We also see that whether the borrower has home has equal proportion in the dataset. And in the box plot, we see that having home will definitely has higher salary income as well, as expected. 
+
+
+
+
+
+
+
