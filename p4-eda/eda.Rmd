@@ -5,31 +5,7 @@ date: "November 27, 2015"
 output: html_document
 ---
 
-
-Due to many variables in this dataset, I only use 13 variables. Those are:
-
-* CreditGrade: The Credit rating that was assigned at the time the listing went live. Applicable for listings pre-2009 period and will only be populated for those listings.
-
-
-* ProsperRating(Alpha): The Prosper Rating assigned at the time the listing was created between AA - HR.  Applicable for loans originated after July 2009.
-
-
-* IsBorrowerHomeowner: A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
-
-* StatedMonthlyIncome: The monthly income the borrower stated at the time the listing was created.
-
-
-* ProsperPaymentsOneMonthPlusLate: 	Number of payments the borrower made on Prosper loans that were greater than one month late at the time they created this listing. This value will be null if the borrower had no prior loans.
-
-* LoanOriginalAmount:	The origination amount of the loan.
-
-* LoanOriginationDate:	The date the loan was originated.
-
-* PercentFunded:	Percent the listing was funded.
-
-* Term:	The length of the loan expressed in months.
-
-* Occupation:	The Occupation selected by the Borrower at the time they created the listing.
+Due to many variables in this dataset, I only use 12 variables. Those are:
 
 ```{r global_options,include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
@@ -56,7 +32,7 @@ df = subset(read.csv('dataset/prosperLoanData.csv'),
                           'PercentFunded',
                           'Term',
                           'Occupation'))
-head(df)
+names(df)
 ```
 
 ## Univariate Plot Section
@@ -102,16 +78,118 @@ ListingCategory: The category of the listing that the borrower selected when pos
 
 Out of the listing category, three categories comes out the highest past 10.000 loans. There's N/A and Other categories, so we can't know for sure the specific category. But the highest is 1, which is Debt Consolidation, where's one take out a loan to pay many others. This comes really high with 58308 loans, overshadowing the rest of the categories. It could be that many Prosper visitors comes with already have loans, and want to search some loans to pay for it.
 
+```{r}
+summary(df$IsBorrowerHomeowner)
+
+by(df$StatedMonthlyIncome, df$IsBorrowerHomeowner,summary)
+```
+
+IsBorrowerHomeowner: A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
+
+When looking at the loan that's been listed, we see that borrower that is home owner is around equal proportion to those who do not. So it's not affecting much. Then I try faceting the homeowner categorical by monthly salary. What I see is that salary is higher to home owner people to those who don't. Since we know that the income is long tail right skewed, mean is not representing most people. Instead median do. In this summary we see that both median and mean both higher for home owner people in term of income. 
+
+```{r}
+ggplot(data=df,aes(x=StatedMonthlyIncome)) + 
+  geom_histogram(binwidth=100) +
+  scale_x_log10()
+```
+
+StatedMonthlyIncome: The monthly income the borrower stated at the time the listing was created. Still we see that isn't much going on with the monthly income
+ 
+```{r}
+ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + geom_boxplot()
+```
+
+And in the box plot, we see that having home will definitely has higher salary income as well, as expected.  The outlier in this data is so high, and it's overshadow the interquartile range. By looking at the boxplot, I see that it's expected the outlier to stay within 50.000. Well StatedMonthlyIncome is the borrower that self-stated his income, I begin to wonder people who has close to 2 million dolars for his monthly income. I categorize this as bad outlier in extreme case, and replot the boxplot to stay within 50000 dolars. 
+
+```{r}
+ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + 
+  geom_boxplot() + 
+  ylim(c(0,50000))
+```
+
+There you go, now it looks like the people who home owner still have higher median salary. still there's many of outliers in both boxplot, since we expect that the income is long tail.
+
+```{r}
+ggplot(df,aes(x=df$ProsperPaymentsOneMonthPlusLate)) + 
+  geom_histogram() + 
+  scale_x_log10()
+
+table(df$ProsperPaymentsOneMonthPlusLate)
+```
+
+ProsperPaymentsOneMonthPlusLate: 	Number of payments the borrower made on Prosper loans that were greater than one month late at the time they created this listing. This value will be null if the borrower had no prior loans.
+
+Here's we see that number of late payments is also very right skewed. Since this is number and not floating point, the number isn't represent as smooth histogram.
+
+Well looking at the frequency count, we see that most of the borrowers have no recommendations when they listing a loans. It may seems really hard to get recommendations in the listing loans, since we see that number only few people that can get at least higher than ten recommendations. 
+
+
+```{r}
+ggplot(df,aes(x=LoanOriginalAmount)) + geom_histogram()
+summary(df$LoanOriginalAmount)
+```
+
+LoanOriginalAmount:	The origination amount of the loan.
+
+Now this is interesting. Here we see that the distribution is still right skewed, but the peak seems like it's around 4000 dolars. In summary table we see that it's the first quarted. While the median is 6500 dolars. Notice that max loan is 35000 dolars, and with people who have high salary as high as ~2 million dolars monthly income, it doesn't make sense if he borrow money with such low amount. Since StatedMonthlyIncome is human input, it can't be trusted hence I will exclude the outlier from now on. 
+
+```{r}
+summary(df$PercentFunded)
+```
+
+PercentFunded:	Percent the listing was funded.
+
+This is percent funded of the loans. It seems not good in any way since most of the data is already 1% funded. Minimum at 0.7% and maximum at 1.02%. We could guess that it may floating number representing the percentage, but with 1.02% it shouldn't be possible.
+
+```{r}
+table(df$Term)
+```
+
+Term:	The length of the loan expressed in months.
+
+Here we see that term of loans only have three categorical, 1 year, 3 years, and 5 years. Most of the loans made around 3 years, with 5 years comes with 24545 loans and 1614 loans at 1 year.
+
+
+```{r}
+table(df$Occupation)
+sort(table(df$Occupation),decreasing = TRUE)[1:5]
+```
+
+
+Occupation:	The Occupation selected by the Borrower at the time they created the listing.
+
+This time we have 68 levels of the categories. Among top 5 is computer programmer and teachers.
+
+```{r}
+table(df$CreditGrade)
+```
+
+
+CreditGrade: The Credit rating that was assigned at the time the listing went live. Applicable for listings pre-2009 period and will only be populated for those listings.
+
+This is essentially the same as Prosper Rating except that credit grade is rating given to loans pre-2009 and ProsperRating given after 2009.
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+
+
+### What is/are the main feature(s) of interest in your dataset?
+
+### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
+
+### Did you create any new variables from existing variables in the dataset?
+
+### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
 
 
 
+Uni Notes:
 
-
-
-
-
-
-
+* It's unlikely people with 2 millions salary have low loan amount
+* Many people makes in ProsperLoan listing loan money to pay their another loan, as shown by higher number of Debt Consolidations
+* Computer programmer and teachers are among top 5 occupation that listing the loans the most.
 
 
 
@@ -132,14 +210,17 @@ ggplot(df,aes(x=StatedMonthlyIncome)) +
 
 Monthly Income will definitely be right skewed, since fewer people will have higher salary. So I cut off the salary above 95% and plot it. If we see in the plot, we notice there's spike everywhere in the histogram. But overall we see that the data has wide distribution.
 
-```{r}
-table(df$IsBorrowerHomeowner)
-ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + geom_boxplot()
-```
+# Univariate Analysis
 
-We also see that whether the borrower has home has equal proportion in the dataset. And in the box plot, we see that having home will definitely has higher salary income as well, as expected. 
+### What is the structure of your dataset?
 
+### What is/are the main feature(s) of interest in your dataset?
 
+### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
+
+### Did you create any new variables from existing variables in the dataset?
+
+### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
 
 
 
