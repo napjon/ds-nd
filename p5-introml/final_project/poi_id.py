@@ -73,24 +73,12 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB ##Default(Tuned): Precision: 0.29453	Recall: 0.43650, BEST!
+from sklearn.naive_bayes import GaussianNB ##Default(Tuned): Precision: 0.29453	Recall: 0.43650
 from sklearn.tree import DecisionTreeClassifier ##Default: Precision: 0.14830	Recall: 0.05450
 from sklearn.ensemble import RandomForestClassifier ##Default: Precision: 0.47575	Recall: 0.20600, Longer time
-from sklearn.linear_model import SGDClassifier ##Tuned: Precision: 0.36853	Recall: 0.35950, BEST
+from sklearn.linear_model import SGDClassifier ##Tuned: Precision: 0.36853	Recall: 0.35950, BEST!
 
-# from sklearn.pipeline import Pipeline
-# text_clf = Pipeline([('vect', TfidfVectorizer()),
-#                       ('clf', SGDClassifier(loss='hinge', penalty='l2',
-#                                             alpha=1e-3, n_iter=5, random_state=42)),
-# ])
 
-# from sklearn.grid_search import GridSearchCV
-# parameters = {'vect__ngram_range': [(1, 1), (1, 2)],
-#                'clf__alpha': (1e-2, 1e-6),
-# }
-
-# # gs_clf = GridSearchCV
-# clf = GridSearchCV(text_clf,parameters)
 
 # clf = SGDClassifier(loss='hinge',
 #                     penalty='l2',
@@ -99,7 +87,7 @@ from sklearn.linear_model import SGDClassifier ##Tuned: Precision: 0.36853	Recal
 #                     n_jobs=-1,
 #                     random_state=42)
 
-clf = GaussianNB()
+# clf = GaussianNB()
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -109,9 +97,27 @@ clf = GaussianNB()
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 
 # Example starting point. Try investigating other evaluation techniques!
-from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.3, random_state=42)
+from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.grid_search import GridSearchCV
+from sklearn.metrics import f1_score
+
+folds = 1000
+
+# StratifiedShuffleSplit is used when we take advantage of skew data but still keeping proportion of labels
+# If we using usual train test split, it could be there's no POI labels in the test set, or even worse in train set
+# which would makes the model isn't good enough. If for example the StratifiedShuffleSplit have 10 folds, then every folds
+# will contains equal proportions of POI vs non-POI
+
+cv = StratifiedShuffleSplit(df.poi,10,random_state=42)
+
+sgd = SGDClassifier(penalty='l2',random_state=42)
+parameters = {'loss': ['hinge','log','squared_hinge'],
+              'n_iter': [30,35],
+              'alpha': [1e-2, 1e-4 ,1e-6],
+              }
+
+clf = GridSearchCV(sgd,parameters,scoring='f1',cv=10)
+
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
