@@ -174,7 +174,6 @@ This is essentially the same as Prosper Rating except that credit grade is ratin
 
 ### What is the structure of your dataset?
 
-
 ### What is/are the main feature(s) of interest in your dataset?
 
 ### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
