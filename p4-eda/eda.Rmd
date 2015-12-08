@@ -15,25 +15,38 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(plyr)
+library(GGally)
 ```
 
 ```{r}
-df = subset(read.csv('dataset/prosperLoanData.csv'), 
-            select=c('CreditGrade', 
-                          'LoanStatus',
-                          'BorrowerRate',
-                          'ProsperRating..Alpha.',
+setwd("/Volumes//Marice-Dev/Workspace/ds_nd/p4-eda")
+data = read.csv("dataset/prosperLoanData.csv")
+drop_users_cols= subset(data,
+                                !duplicated(data$MemberKey),#drop duplicated users
+                                select=c('BorrowerRate',
+                          'ProsperRating..numeric.',
                           'ListingCategory..numeric.',
                           'IsBorrowerHomeowner',
                           'StatedMonthlyIncome',
                           'Recommendations',
                           'ProsperPaymentsOneMonthPlusLate',
                           'LoanOriginalAmount',
-                          'PercentFunded',
                           'Term',
-                          'Occupation'))
-names(df)
+                          'Occupation',
+                          'LoanStatus',
+                          'CreditGrade',
+                          'PercentFunded'))
+df = rename(drop_users_cols, c('ProsperRating..numeric.' = 'Rating',
+                     'BorrowerRate'= 'Rate',
+                     'IsBorrowerHomeowner'='Homeowner',
+                     'StatedMonthlyIncome'= 'Income',
+                     'ProsperPaymentsOneMonthPlusLate'= 'PaymentsLate',
+                     'LoanOriginalAmount'= 'Amount',
+                     'ListingCategory..numeric.' = 'Category'))
 ```
+
+
 
 ## Univariate Plot Section
 
@@ -46,79 +59,63 @@ Recommendations: Number of recommendations.
 
 This is the number of recommendations that Borrowers have when listing the loans. We can see that the number of the recommendations is right skewed, with the mean 0.04, which in average borrower doesn't has many number of recommendations. And it goes as high as 39 recommendations for just one borrower.
 
-```{r}
-summary(df$LoanStatus)
-```
 
-LoanStatus: The current status of the loan: Cancelled,  Chargedoff, Completed, Current, Defaulted, FinalPaymentInProgress, PastDue. The PastDue status will be accompanied by a delinquency bucket.
-
-Many of the loan status in this dataset are still running, loan completd comes second with 38074 unit. There are also loan status that past due about 2000 loans.
 
 ```{r}
-ggplot(df,aes(x=BorrowerRate)) + geom_histogram()
+ggplot(df,aes(x=Rate)) + geom_histogram()
 ```
 
-BorrowerRate: The Borrower's interest rate for this loan. 
+Rate: The Borrower's interest rate for this loan. 
 
 The borrower's rate follow almost unimodal distribution, with peak around 0.16. There's spike occurs, around 0.3, but doesn't make enough to be second peak. 
 
 ```{r}
-table(df$ProsperRating..Alpha.)
+table(df$Rating)
 ```
 
-ProsperRating(Alpha): The Prosper Rating assigned at the time the listing was created between AA - HR.  Applicable for loans originated after July 2009.
+Rating : The Prosper Rating assigned at the time the listing was created between AA - HR.  Applicable for loans originated after July 2009.
 
 The Rating could also be null, if the Prosper system can't rate the loan. And about 29084 loans can't rated by Prosper, which means that the loans originated before July 2009. The number of rating almost follow the order of the rating, except A-grade is the highest number of rating, AA comes second, and the rest following the order.
 
 ```{r}
-table(df$ListingCategory..numeric.)
+table(df$Category)
 ```
 
-ListingCategory: The category of the listing that the borrower selected when posting their listing: 0 - Not Available, 1 - Debt Consolidation, 2 - Home Improvement, 3 - Business, 4 - Personal Loan, 5 - Student Use, 6 - Auto, 7- Other, 8 - Baby&Adoption, 9 - Boat, 10 - Cosmetic Procedure, 11 - Engagement Ring, 12 - Green Loans, 13 - Household Expenses, 14 - Large Purchases, 15 - Medical/Dental, 16 - Motorcycle, 17 - RV, 18 - Taxes, 19 - Vacation, 20 - Wedding Loans
+Category: The category of the listing that the borrower selected when posting their listing: 0 - Not Available, 1 - Debt Consolidation, 2 - Home Improvement, 3 - Business, 4 - Personal Loan, 5 - Student Use, 6 - Auto, 7- Other, 8 - Baby&Adoption, 9 - Boat, 10 - Cosmetic Procedure, 11 - Engagement Ring, 12 - Green Loans, 13 - Household Expenses, 14 - Large Purchases, 15 - Medical/Dental, 16 - Motorcycle, 17 - RV, 18 - Taxes, 19 - Vacation, 20 - Wedding Loans
 
 Out of the listing category, three categories comes out the highest past 10.000 loans. There's N/A and Other categories, so we can't know for sure the specific category. But the highest is 1, which is Debt Consolidation, where's one take out a loan to pay many others. This comes really high with 58308 loans, overshadowing the rest of the categories. It could be that many Prosper visitors comes with already have loans, and want to search some loans to pay for it.
 
 ```{r}
-summary(df$IsBorrowerHomeowner)
+summary(df$Homeowner)
 
-by(df$StatedMonthlyIncome, df$IsBorrowerHomeowner,summary)
 ```
 
-IsBorrowerHomeowner: A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
+Homeowner: A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
 
-When looking at the loan that's been listed, we see that borrower that is home owner is around equal proportion to those who do not. So it's not affecting much. Then I try faceting the homeowner categorical by monthly salary. What I see is that salary is higher to home owner people to those who don't. Since we know that the income is long tail right skewed, mean is not representing most people. Instead median do. In this summary we see that both median and mean both higher for home owner people in term of income. 
+When looking at the loan that's been listed, we see that borrower that is home owner is around equal proportion to those who do not. So it's not affecting much. 
+
 
 ```{r}
-ggplot(data=df,aes(x=StatedMonthlyIncome)) + 
-  geom_histogram(binwidth=100) +
-  scale_x_log10()
+ggplot(df, aes(x=Income)) +
+  geom_histogram(binwidth = 0.03)+
+  scale_x_log10(limits = c(quantile(df$Income,0.05),quantile(df$Income,0.95)))
 ```
 
-StatedMonthlyIncome: The monthly income the borrower stated at the time the listing was created. Still we see that isn't much going on with the monthly income
+Income: The monthly income the borrower stated at the time the listing was created. Still we see that isn't much going on with the monthly income.
  
-```{r}
-ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + geom_boxplot()
-```
+Monthly Income will definitely be right skewed, since fewer people will have higher salary. So I cut the outliers and log 10 scale. 
 
-And in the box plot, we see that having home will definitely has higher salary income as well, as expected.  The outlier in this data is so high, and it's overshadow the interquartile range. By looking at the boxplot, I see that it's expected the outlier to stay within 50.000. Well StatedMonthlyIncome is the borrower that self-stated his income, I begin to wonder people who has close to 2 million dolars for his monthly income. I categorize this as bad outlier in extreme case, and replot the boxplot to stay within 50000 dolars. 
+
 
 ```{r}
-ggplot(df,aes(x=IsBorrowerHomeowner,y=StatedMonthlyIncome)) + 
-  geom_boxplot() + 
-  ylim(c(0,50000))
-```
-
-There you go, now it looks like the people who home owner still have higher median salary. still there's many of outliers in both boxplot, since we expect that the income is long tail.
-
-```{r}
-ggplot(df,aes(x=df$ProsperPaymentsOneMonthPlusLate)) + 
+ggplot(df,aes(x=df$PaymentsLate)) + 
   geom_histogram() + 
   scale_x_log10()
 
-table(df$ProsperPaymentsOneMonthPlusLate)
+table(df$PaymentsLate)
 ```
 
-ProsperPaymentsOneMonthPlusLate: 	Number of payments the borrower made on Prosper loans that were greater than one month late at the time they created this listing. This value will be null if the borrower had no prior loans.
+PaymentsLate: 	Number of payments the borrower made on Prosper loans that were greater than one month late at the time they created this listing. This value will be null if the borrower had no prior loans.
 
 Here's we see that number of late payments is also very right skewed. Since this is number and not floating point, the number isn't represent as smooth histogram.
 
@@ -126,21 +123,15 @@ Well looking at the frequency count, we see that most of the borrowers have no r
 
 
 ```{r}
-ggplot(df,aes(x=LoanOriginalAmount)) + geom_histogram()
-summary(df$LoanOriginalAmount)
+ggplot(df,aes(x=Amount)) + geom_histogram()
+summary(df$Amount)
 ```
 
-LoanOriginalAmount:	The origination amount of the loan.
+Amount:	The origination amount of the loan.
 
 Now this is interesting. Here we see that the distribution is still right skewed, but the peak seems like it's around 4000 dolars. In summary table we see that it's the first quarted. While the median is 6500 dolars. Notice that max loan is 35000 dolars, and with people who have high salary as high as ~2 million dolars monthly income, it doesn't make sense if he borrow money with such low amount. Since StatedMonthlyIncome is human input, it can't be trusted hence I will exclude the outlier from now on. 
 
-```{r}
-summary(df$PercentFunded)
-```
 
-PercentFunded:	Percent the listing was funded.
-
-This is percent funded of the loans. It seems not good in any way since most of the data is already 1% funded. Minimum at 0.7% and maximum at 1.02%. We could guess that it may floating number representing the percentage, but with 1.02% it shouldn't be possible.
 
 ```{r}
 table(df$Term)
@@ -162,6 +153,22 @@ Occupation:	The Occupation selected by the Borrower at the time they created the
 This time we have 68 levels of the categories. Among top 5 is computer programmer and teachers.
 
 ```{r}
+summary(df$LoanStatus)
+```
+
+LoanStatus: The current status of the loan: Cancelled,  Chargedoff, Completed, Current, Defaulted, FinalPaymentInProgress, PastDue. The PastDue status will be accompanied by a delinquency bucket.
+
+Many of the loan status in this dataset are still running, loan completd comes second with 38074 unit. There are also loan status that past due about 2000 loans.
+
+```{r}
+summary(df$PercentFunded)
+```
+
+PercentFunded:  Percent the listing was funded.
+
+This is percent funded of the loans. It seems not good in any way since most of the data is already 1% funded. Minimum at 0.7% and maximum at 1.02%. We could guess that it may floating number representing the percentage, but with 1.02% it shouldn't be possible.
+
+```{r}
 table(df$CreditGrade)
 ```
 
@@ -170,58 +177,224 @@ CreditGrade: The Credit rating that was assigned at the time the listing went li
 
 This is essentially the same as Prosper Rating except that credit grade is rating given to loans pre-2009 and ProsperRating given after 2009.
 
+
+
 # Univariate Analysis
 
 ### What is the structure of your dataset?
 
-### What is/are the main feature(s) of interest in your dataset?
+There are 113937 loans in this dataset and 81 dataset (I only use 10 among them). I rename the columns to make it short, and drop duplicate data so 1 observations consist of 1 person.
 
-### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
-
-### Did you create any new variables from existing variables in the dataset?
-
-### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
-
-
-
-Uni Notes:
+Other observations:
 
 * It's unlikely people with 2 millions salary have low loan amount
 * Many people makes in ProsperLoan listing loan money to pay their another loan, as shown by higher number of Debt Consolidations
 * Computer programmer and teachers are among top 5 occupation that listing the loans the most.
 
-
-
-Let's plot borrowers' rate with their monthly income 
-
-```{r}
-ggplot(df,aes(x=BorrowerRate, y=StatedMonthlyIncome)) + geom_point()
-```
-
-I can see that it doesn't have any correlation linearly in the plot. As the rate is moving up, the income of the borrowers isn't affected. So no matter how much money people have doesn't affected by the rate people are given.
-
-```{r}
-ggplot(df,aes(x=StatedMonthlyIncome)) +
-  geom_histogram(bin=20)+
-  xlim(c(0,quantile(df$StatedMonthlyIncome,0.95))) +
-  scale_y_continuous(trans = "log10")
-```
-
-Monthly Income will definitely be right skewed, since fewer people will have higher salary. So I cut off the salary above 95% and plot it. If we see in the plot, we notice there's spike everywhere in the histogram. But overall we see that the data has wide distribution.
-
-# Univariate Analysis
-
-### What is the structure of your dataset?
-
 ### What is/are the main feature(s) of interest in your dataset?
+
+The main features of the dataset is the Prosper rating. I like to what are features among these 13 that will best play as predictor for the Prosper rating.
 
 ### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
 
+I want to test the features that only exist when borrower listing the loans. Features like income, loan, occupation, listing category, recommendations, borrower rate, whether borrowers is home owner, number of payments late, and term is features that I like to get better idea for seeing whether the features contribute to predict posper rating. 
+
 ### Did you create any new variables from existing variables in the dataset?
+
+For this dataset, I don't create new feature. 
 
 ### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
 
+There is unusual features in this dataset, in particular, monthly income. This is stated(human input) by the borrowers. As such, we see many unusual salary. there's borrower who's stated their monthly income close to two millions but makes 35000 dolars loan. There's also person who who makes 0 dolars monthly salary. So I tidy the features by excluding 5% below and 95% above. We know that income will be long tail right skewed, and the distance will be very far among salary. So I use log 10 transformations. The result after excluding outliers and log 10 transformation produces normal distribution.
 
+# Bivariate Plots Section
+
+
+
+```{r}
+
+df1 = subset(df, select = -c(LoanStatus,
+                          CreditGrade,
+                          PercentFunded))
+set.seed(12345)
+loans_sample = df[sample(1:length(df$Rating), 1000),]
+ggpairs(loans_sample,params = c(shape = I('.'), outlier.shape = I('.')))
+```
+
+
+Let's take a look at them in details
+
+```{r}
+ggplot(df,aes(x=Rate,y=Rating)) + geom_point(alpha = 0.01)
+```
+
+We see that eventhough rating isn't properly scattered,(only 6 different rating), as the rate lower, the rating is increasing. And we see that it has strong negative linear relationship. Strong correlation is indicated by . This is can be explained as the interest rate is the one where the loaner have benefit from the money that he/she loans.
+
+```{r}
+ggplot(df,aes(x=Homeowner,y=Rating)) + geom_boxplot()
+```
+
+While the distribution of the rating between homeowner and not homeowner is the same (you can see the median is the same for both category), rating of homeowner has higher Q3 then those who do not.
+
+```{r}
+ggplot(df,aes(x=Amount,y=Rating)) + geom_point(alpha = 0.01)
+```
+
+Loan amount is also showing linear increase. As the amount increase, the center of the rating is also increasing. Rsquared for this is 0.47, which shown positive moderate linear relationship.
+
+
+```{r}
+ggplot(df,aes(x=Recommendations,y=Rating)) + geom_point()
+```
+
+I don't see any relationship in recommendations.
+
+```{r}
+ggplot(df,aes(x=PaymentsLate,y=Rating)) + geom_point()
+```
+
+PaymentsLate should also be an indication where higher payments late by borrower should seen as bad rating. However, prosper rating shown weak relationship, although the outliers shown an indication stated.
+
+```{r}
+by(df$Income, df$Homeowner,summary)
+```
+
+Then I try faceting the homeowner categorical by monthly salary. What I see is that salary is higher to home owner people to those who don't. Since we know that the income is long tail right skewed, mean is not representing most people. Instead median do. In this summary we see that both median and mean both higher for home owner people in term of income. 
+
+```{r}
+ggplot(df,aes(x=Homeowner,y=Income)) + geom_boxplot()
+```
+
+And in the box plot, we see that having home will definitely has higher salary income as well, as expected.  The outlier in this data is so high, and it's overshadow the interquartile range. By looking at the boxplot, I see that it's expected the outlier to stay within 50.000. Well StatedMonthlyIncome is the borrower that self-stated his income, I begin to wonder people who has close to 2 million dolars for his monthly income. I categorize this as bad outlier in extreme case, and replot the boxplot to stay within 50000 dolars. 
+
+```{r}
+ggplot(df,aes(x=Homeowner,y=Income)) + 
+  geom_boxplot() + 
+  ylim(c(0,50000))
+```
+
+There you go, now it looks like the people who home owner still have higher median salary. still there's many of outliers in both boxplot, since we expect that the income is long tail.
+
+```{r}
+ggplot(df,aes(y=Income,x=Rate)) + geom_point()
+```
+
+I see no relationship betwen both relationship.
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
+
+Almost all of them has no strong relationship with the prosper rating. Interest rate however shows strong relationship to prosper rating. Based on data, borrowers' interes rate explains 91.15% of the variance in prosper rating.
+
+### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
+
+When observing the relationship between whether person is homeowner and their monthly stated income, it's becoming clear that those who have home has higher income both median and mean. Observing the data, with median, salary of homeowner is 1700 dolars higher than those who doesn't have a home. 
+
+### What was the strongest relationship you found?
+
+The strongest relationship shown by interest rate and rating, with negative strong linear relationship. The second one is relationship with original loan amount and the rating, which shows positive moderately strong linear relationship. Both loan amount and interest rate can be used when want to infer rating, since it moves in the opposite direction.
+
+# Multivariate Plots Section
+
+````{r}
+ggplot(df, aes(x=Income)) +
+  geom_density(aes(group=Rating,color=Rating)) +
+  scale_x_log10(limits = c(quantile(df$Income,0.05),quantile(df$Income,0.95)))
+```
+
+```{r}
+ggplot(df, aes(x=Rate)) +
+ geom_density(aes(group=Rating,color=Rating,y=..count..))
+```
+
+```{r}
+ggplot(df, aes(x=Amount)) +
+  geom_density(aes(group=Rating,color=Rating))
+```
+
+```{r}
+ggplot(df, aes(x=PaymentsLate)) +
+  geom_density(aes(group=Rating,color=Rating)) +
+  scale_x_log10()
+```
+
+I see that the Income now affects the rating as well, but not with a wide margin. The lowest rating is peak around the center of the Income. but as the rating goes up, the center of the income turns out also change, shifted towards the right making it left skewed distribution.
+
+While it also apparent that the lower the rating, the rarer it is based on the density plot. Note that we have huge peak for rating lowest rating when I plot it against interest rate and loan amount. 1 is HR in the prosper rating, which means high risk. Interestingly, we see that borrower with high interest rate, will receive low rating from Prosper.
+
+But that is not the case with the loan amount. Even if the loan amount is really high, doesn't make it high risk.
+
+```{r}
+ggplot(subset(df,Income < quantile(df$Income,0.95)),
+       aes(y=Income/Rating, x=Homeowner)) + 
+  geom_boxplot()
+```
+
+Income/rating shown no unusual difference when plotting against homeowner.
+
+```{r}
+ggplot(df,aes(x=Rate, y=Rating, color=Homeowner)) + geom_point(alpha=0.1)
+```
+
+As we can see that those without homeowner tend to have higher interest rate, and thus lower rating. While homeowner tends to have lower interest rate and higher rating. This also makes us believe that homeowner is safer bet for people who loans their money.
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
+
+Monthly income indeed strengthen the Prosper rating. We see that the center of the distribution between each rating is shifted to the right everytime the rating is going up. 
+
+Number of payments late also affecting the rating. The rating will go up as the borrowers has higher number of late payments.
+
+### Were there any interesting or surprising interactions between features?
+
+High amount of loans should generate high risk, since it's risky if someone doesn't pay the the loans. But here the rating doesn't event consider the loan amount. Even the opposite, low loan amount could generate higher risk.
+
+## Final Plots and Summary
+
+### Plot One
+
+```{r}
+ggplot(df, aes(x=Income)) +
+  geom_histogram(binwidth = 0.03)+
+  scale_x_log10(limits= c(quantile(df$Income,0.05),quantile(df$Income,0.95))) 
+```
+
+### Description One
+
+Salary Income is expected to be highly right skewed, since fewer and fewer people have higher salary. But it's human input, so it's expected to be an outlier as well. After exclude the outliers and log10 scale the  income, we have tidier normal distribution.
+
+
+### Plot Two
+
+```{r}
+ggplot(na.omit(df),aes(y=Rate,x=Rating, group=Rating)) +
+  geom_boxplot() +
+  ggtitle("Prosper Rating by Interest Rate ")
+```
+
+### Description Two
+
+Prosper Rating is strongly correlated with borrower's interest rate, with negative linear relationship. The lowest Prosper rating have highest median of interest rate. 
+
+### Plot Three
+
+````{r}
+ggplot(df, aes(x=Income)) +
+  geom_density(aes(group=Rating,color=Rating)) +
+  scale_x_log10(limits = c(quantile(df$Income,0.05),quantile(df$Income,0.95))) +
+  ggtitle("Density Plot of Salary Income for Prosper Rating")
+```
+
+### Description Three
+
+While it's not a very distinct trend, we see that the center of the distribution, is shifted towards the right when the rating goes higher. We can't see the normal distribution like this unless we exclude 5% and 95% quantiles, and also log10 scale the income.
+
+
+## Reflection
+
+The dataset is from the Prosper loans, where people could loans money by listing it in the website, specifying all of the requirement field. The columns specified by the borrowers, among the 13 features I'm exploring are homeowner, income, and occupation.  Of course since this is human input, we should expect that there will be human error. We see that income that is stated by the borrowers, could be as high as close to 2 million dollars, and when I investigate this, the borrower just ask for 35000 dolars. This is very unlikely, given his high monthly salary. Income is expected to be right skewed as well, so I scale log10 the income and also exclude the outlier. The features of interest is Prosper Rating, that is what features that contributed to the Prosper rating system. The rating is given immediately after the loans is listed, so I only concern about those features that actually exist at the time of the listing. So among all of the features, I select borrower's interest rate, homeowner, listing category, borrower's income, number of late payments, number of recommendation, loans' term, and the occupation of the borrower. Among all of this features, the interest rate is strongly correlated, with lower interest rate contribute to higher prosper rating. I'm actually surprise that loans amount is not contributed significantly to the rating. I expect that the higher the loans, the higher the risk the loaner should have. There is whole 81 features in the dataset, and I only select 13 variables in this dataset. It's interesting additional features to predict the rating of the Prosper system.
 
 
 
