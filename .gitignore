@@ -23,3 +23,6 @@ bin
 .settings
 .target
 ._*
+
+.RData
+.Rhistory
