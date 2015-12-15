@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo=FALSE,
                       message=FALSE,
                       fig.width=7,
                       fig.height=5)
-
 ```
 
 ```{r}
@@ -22,7 +21,9 @@ library(dplyr)
 library(plyr)
 library(GGally)
 library(scales)
+library(reshape2)
 ```
+
 
 ```{r}
 setwd("/Volumes//Marice-Dev/Workspace/ds_nd/p4-eda")
@@ -120,7 +121,7 @@ When looking at the loan that's been listed, we see that borrower that is home o
 ```{r}
 q95 = quantile(df$Income,0.95)
 scaled_income = scale_x_log10(limits= c(quantile(df$Income,0.05),q95),
-                              breaks = seq(1000,q95,1000))
+                              breaks = seq(2500,q95,2500))
 ggplot(df, aes(x=Income)) +
   geom_histogram(binwidth = 0.03)+
   scaled_income
@@ -186,12 +187,14 @@ This time we have 68 levels of the categories. Among top 5 is computer programme
 
 ```{r}
 summary(df$LoanStatus)
-ggplot(df,aes(x=LoanStatus)) + geom_bar()
+ggplot(df,aes(x=LoanStatus)) + 
+  geom_bar() +
+  theme(axis.text.x = element_text(angle=90,hjust=1))
 ```
 
 LoanStatus: The current status of the loan: Cancelled,  Chargedoff, Completed, Current, Defaulted, FinalPaymentInProgress, PastDue. The PastDue status will be accompanied by a delinquency bucket.
 
-Many of the loan status in this dataset are still running, loan completd comes second with 38074 unit. There are also loan status that past due about 2000 loans. We also see
+Many of the loan status in this dataset are still running, loan completd comes second with 38074 unit. There are also loan status that past due about 2000 loans. We also see from the bar chart, `Current` has the highest count, which means many borrowers is currently in loans. We see very small number of users which their loans past due, based on the data, suggest that all of borrowers has fulfill their debt.
 
 ```{r}
 summary(df$PercentFunded)
@@ -242,8 +245,6 @@ There is unusual features in this dataset, in particular, monthly income. This i
 
 # Bivariate Plots Section
 
-
-
 ```{r}
 
 df = subset(df,!is.na(Rating),
@@ -282,24 +283,34 @@ ggplot(df,aes(x=Homeowner,y=Rating)) + geom_boxplot()
 While the distribution of the rating between homeowner and not homeowner is the same (you can see the median is the same for both category), rating of homeowner has higher Q3 then those who do not.
 
 ```{r}
-ggplot(df,aes(x=Amount,y=Rating)) + geom_point(alpha = 0.01)
+ggplot(df,aes(y=Amount,x=factor(Rating))) + geom_boxplot(alpha=0.1)
 ```
 
-Loan amount is also showing linear increase. As the amount increase, the center of the rating is also increasing. Rsquared for this is 0.47, which shown positive moderate linear relationship.
+This is interesting. Rating for 1 and 2 has really small IQR compared to the rest ot the rating. Rating 3,4 has no outlier. Rating 5,6 has similar outlier, and rating 7 has one outlier. With correlation of 0.47, it shows positive moderately strong linear relationship, and indeed we see as the rating increase, the loan amount has longer and longer tail.
 
 
 ```{r}
-ggplot(df,aes(x=factor(Rating),y=factor(Recommendations))) +
-  geom_tile(fill="blue") +
-  theme_bw()
- # scale_fill_gradient(low='white',high='blue')
-cor.test(df$Recommendations,df$Rating)
+tab<-table(df$Recommendations,df$Rating)
+tab.long<-melt(tab)
+colnames(tab.long)<-c("Recommendations","Rating","Count")
+ggplot(tab.long,
+       aes(y=Rating, x=Recommendations,fill=log(Count)))+
+    geom_tile() + 
+    xlim(0,6) + 
+    scale_fill_gradient(low='white',high='red')
 ```
 
-I don't see any relationship in recommendations.The correlation is 0.005 indicates that both variables almost have no relationship.
+When looking at the heatmap above, I see that lot of the borrower have lower rating, as it confirms with the univariate chart that we saw earlier. I see almost no correlation however, increase number of recommendations doesn't affect much of the Prosper Rating. This also correlates with 0.05 correlation between both variables.
 
 ```{r}
-ggplot(df,aes(x=PaymentsLate,y=Rating)) + geom_point()
+tab<-table(df$PaymentsLate,df$Rating)
+tab.long<-melt(tab)
+colnames(tab.long)<-c("PaymentsLate","Rating","Count")
+ggplot(tab.long, aes(x=PaymentsLate, y=Rating,fill=log(Count))) +
+    scale_x_log10() +
+    geom_tile() +
+    xlim(0,10) +
+    scale_fill_gradient(low='white',high='red')
 ```
 
 PaymentsLate should also be an indication where higher payments late by borrower should seen as bad rating. However, prosper rating shown weak relationship, although the outliers shown an indication stated.
@@ -329,11 +340,12 @@ There you go, now it looks like the people who home owner still have higher medi
 ```{r}
 ggplot(df,aes(y=Income,x=Rate)) +
   geom_point(alpha=1/50) +
+  stat_smooth() +
   ylim(0,quantile(df$Income,0.999))
 cor.test(df$Rate,df$Income)
 ```
 
-I see no relationship betwen both relationship. We can see that in the figure as interest rate increase, shows no sign of increase in the borrower's income. Additionally, the correlation also approximate to zero which shows almost no correlation.
+I see no relationship betwen both relationship. We can see that in the figure as interest rate increase, shows no sign of increase in the borrower's income. Additionally, the correlation also approximate to zero which shows almost no correlation. Interestingly, when I add a regression line, I can see that income slightly decrease as the interest rate increase. So we see in regression line based on the data, people with lower income tend to have higher interest rate.
 
 # Bivariate Analysis
 
