@@ -1,6 +1,5 @@
 .DS_Store
 dataset/
-data/
 Tutorial/
 galleries/
 metastore_db/
@@ -9,8 +8,6 @@ metastore_db/
 logs/
 *.pyc
 *.log
-*.csv
-*.tsv
 part-*
 project/project/
 project/target/
