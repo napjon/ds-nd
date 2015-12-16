@@ -1,7 +1,6 @@
 .DS_Store
 dataset/
 data/
-!p6-datviz/data/*sv
 Tutorial/
 galleries/
 metastore_db/
@@ -27,3 +26,5 @@ bin
 
 .RData
 .Rhistory
+
+!p6-datviz/data/
