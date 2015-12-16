@@ -27,4 +27,4 @@ bin
 .RData
 .Rhistory
 
-!/p6-datviz/data/
+!/p6-datviz/data/*
