@@ -1,7 +1,7 @@
 .DS_Store
 dataset/
 data/
-!p6-datvis/data/*sv
+!p6-datviz/data/*sv
 Tutorial/
 galleries/
 metastore_db/
