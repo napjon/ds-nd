@@ -24,36 +24,35 @@ change the format to hour period.
 
 ## Person 1
 
-* What do you notice in the visualization?
+* *What do you notice in the visualization?*
 I notice, there is no significant turn on both graph. Consistency on both fligh operation & delayed flight are steady.
-* What questions do you have about the data?
+* *What questions do you have about the data?*
 No question
-* What relationships do you notice?
+* *What relationships do you notice?*
 The more flight operation, should be, the more chance delayed flight
-* What do you think is the main takeaway from this visualization?
+* *What do you think is the main takeaway from this visualization?*
 US flight operation runs steady
-* Is there something you don’t understand in the graphic?
+* *Is there something you don’t understand in the graphic?*
 I think graphic quite clear. I understand.
 
 ## Person 2
 
-What do you notice in the visualization?
+* *What do you notice in the visualization?*
 I notice that the number of on-time flight is way more compare to the
 delay flight
 
-What questions do you have about the data?
+* *What questions do you have about the data?*
 With Such a high number of delayed flighht, how come the total Minutes
 is very small?
 
-What relationships do you notice?
+* *What relationships do you notice?*
 The Relation between carrier Delay and Late Arrival is highly correlated
 base on totalhe second graph
 
-What do you think is the main takeaway from this visualization?
-
+* *What do you think is the main takeaway from this visualization?*
 The Graph is pretty straight forward and easy to digest
 
-Is there something you don’t understand in the graphic?
+* *Is there something you don’t understand in the graphic?*
 I can’t really understand is there a relationship between number of
 flight with the amount of delays.
 
