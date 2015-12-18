@@ -40,18 +40,14 @@ I think graphic quite clear. I understand.
 * *What do you notice in the visualization?*
 I notice that the number of on-time flight is way more compare to the
 delay flight
-
 * *What questions do you have about the data?*
 With Such a high number of delayed flighht, how come the total Minutes
 is very small?
-
 * *What relationships do you notice?*
 The Relation between carrier Delay and Late Arrival is highly correlated
 base on totalhe second graph
-
 * *What do you think is the main takeaway from this visualization?*
 The Graph is pretty straight forward and easy to digest
-
 * *Is there something you don’t understand in the graphic?*
 I can’t really understand is there a relationship between number of
 flight with the amount of delays.
