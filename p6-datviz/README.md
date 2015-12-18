@@ -8,6 +8,22 @@ Second plot measures delay vary based on weather,airlines, etc.
 
 # Design
 
+The visualization initialized as a time series data, showing 2015 US
+Flight performance. Originally the visualization starts with on time
+flights measured by delayed flights. But delay flights is not the only
+one that makes flights not on time. Time series line plot chosen for
+this visualization. 
+
+I don't use pie chart as visualization, as it makes
+harder to measure the angle. I don't use stacked bar chart as categories
+can be measured because each month will have different height
+baseline(depends on category below it). With this visualization, we
+can compare total number of flights, decrease because of which incident,
+and we can compare various incident independently.
+
+Delayed minutes also use with time series line plot, because we can see
+which delay affecting delay overall.
+
 After collecting the feedback, in the first plot  I notice that number of flights delay
 doesn't really cared that much, and they just prefer to have total delay
 altogether. So based on this, I will just use total number of flights
