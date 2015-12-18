@@ -8,6 +8,7 @@
   <style> 
 circle.dimple-series-1 {
   fill : red;
+
 }
 
  h2 {
@@ -52,15 +53,17 @@ circle.dimple-series-1 {
             flightChart.addSeries(label, dimple.plot.line, [x,y_add]);
           }
 
-          addFlightMeasure("arr_cancelled", "Cancelled Flights");
-          addFlightMeasure("arr_del15", "Delayed(>15min) Flights");
-          addFlightMeasure("arr_diverted", "Diverted Flights");
+          addFlightMeasure("carrier_ct", "Carrier Delay");
+          addFlightMeasure("weather_ct", "Weather Delay");
+          addFlightMeasure("nas_ct", "Nas Delay");
+          addFlightMeasure("security_ct", "Security Delay");
+          addFlightMeasure("late_aircraft_ct", "Late Aircraft Delay");
           flightChart.addLegend("10%,20px",10,"left");
 
 
           d3.select("body")
           .append("h2")
-          .text("Total US Hours Delay Flight Operations 2015");
+          .text("Total US Minutes Delay Flight Operations 2015");
 
           var delay_svg = d3.select("body")
             .append("svg")
@@ -79,9 +82,7 @@ circle.dimple-series-1 {
           x_d.addOrderRule("month")
           var y1_d =  delayChart.addMeasureAxis("y", "arr_delay");
           delayChart.addSeries("Total Delay", dimple.plot.line, [x_d,y1_d]);
-          // y1_d.tickFormat = d3.time.hours;
 
-          // debugger;
           function addDelayMeasure(col, label){
             var y_add = delayChart.addMeasureAxis(y1_d, col);
             var ser = delayChart.addSeries(label, dimple.plot.line, [x_d,y_add]);
