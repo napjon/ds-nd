@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+
+  <style> 
+
+ h2 {
+  text-align: center;
+ }
+  </style>
+    <script type="text/javascript">
+      function draw(data) {
+      
+      /*
+        D3.js setup code
+      */
+          "use strict";
+          var margin = 75,
+              width = 1400 - margin,
+              height = 600 - margin;
+
+
+          //The visualization will consist on two part. Number of flights and number of delay.
+          //Delay is the biggest reason why flights not on time. So I make second plot that depict delay overall and how various delay vary itself.
+
+          function appendTitle(title){
+            return d3.select("body")
+                    .append("h2")
+                    .text(title);
+          }
+          
+          appendTitle("Total US Flight Operations 2015");
+
+        //debugger;
+
+          function appendSVG(){
+            return d3.select("body")
+                    .append("svg")
+                      .attr("width", width + margin)
+                      .attr("height", height + margin)
+                    .append('g')
+                        .attr('class','chart');
+          }
+
+          var flight_svg = appendSVG();
+
+      /*
+        Dimple.js Chart construction code
+      */
+          //debugger;
+
+
+          function getBaselineChart(svg,x_col,y_col,lab){
+            var chart = new dimple.chart(svg, data);
+            var x = chart.addTimeAxis("x", x_col, "%m", "%b");
+            var y =  chart.addMeasureAxis("y", y_col);
+            chart.addSeries(lab, dimple.plot.line, [x,y]);
+
+            return [chart,x,y];
+          }
+
+          var baselines = getBaselineChart(flight_svg,"month","on_time_flights","On Time Flights");
+          var flightChart = baselines[0];
+          var x_f = baselines[1];
+          var y_f = baselines[2];
+
+          function addFlightMeasure(col, label){
+            var y_add = flightChart.addMeasureAxis(y_f, col);
+            flightChart.addSeries(label, dimple.plot.line, [x_f,y_add]);
+          }
+
+          addFlightMeasure("arr_cancelled", "Cancelled Flights");
+          addFlightMeasure("arr_del15", "Delayed(>15min) Flights");
+          addFlightMeasure("arr_diverted", "Diverted Flights");
+          flightChart.addLegend("10%,20px",10,"left");
+
+          appendTitle("Total US Hours Delay Flight Operations 2015");
+          var delay_svg = appendSVG()
+
+      /*
+        Dimple.js Chart construction code
+      */
+          var baselines = getBaselineChart(delay_svg,"month","arr_delay","Total Delay");
+          var delayChart = baselines[0];
+          var x_d = baselines[1];
+          var y_d = baselines[2];
+
+
+          // debugger;
+          function addDelayMeasure(col, label){
+            var y_add = delayChart.addMeasureAxis(y_d, col);
+            var ser = delayChart.addSeries(label, dimple.plot.line, [x_d,y_add]);
+          }
+
+          addDelayMeasure("carrier_delay", "Carrier Delay");
+          addDelayMeasure("weather_delay", "Weather Delay");
+          addDelayMeasure("nas_delay", "Nas Delay");
+          addDelayMeasure("security_delay", "Security Delay");
+          addDelayMeasure("late_aircraft_delay", "Late Aircraft Delay");
+          delayChart.addLegend("10%,20px",10,"left");
+
+
+
+          flightChart.draw();
+          delayChart.draw();
+
+          // debugger;
+
+
+
+
+        };
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the TSV file
+    and pass the contents of it to the draw function
+    */
+  d3.csv("agg_month_sum_airlines_2015.csv_", draw);
+  </script>
+</body>
+</html>

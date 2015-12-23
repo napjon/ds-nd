@@ -1,28 +1,39 @@
+This is the visualization:
+
+
 # Summary
 
 The visualization measures the performance of 2015 US
 Flight.
 Performance based on how much on time number of flights, and how it
 decrease vary based on number of flights delay,cancelled,diverted.
-Second plot measures delay vary based on weather,airlines, etc.
+Second plot measures delay across months based on carrier.
 
 # Design
 
-The visualization initialized as a time series data, showing 2015 US
-Flight performance. Originally the visualization starts with on time
-flights measured by delayed flights. But delay flights is not the only
-one that makes flights not on time. Time series line plot chosen for
-this visualization. 
+When I visited
+[RITA](http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp) to get
+the data, I notice that they use pie chart for visualization. This is
+harder to measure based on the angle, and it doesn't span very well
+across month. So I want to build visualization like theirs but clearer
+and additional time series.I found one of Udacity material (link in References
+section) about time-series part-to-whole relationship is
+best explained with line plot, and each part can be compared across
+time. It's better than stacked bar chart since stacked bar harder to measure for each part.
 
-I don't use pie chart as visualization, as it makes
-harder to measure the angle. I don't use stacked bar chart as categories
-can be measured because each month will have different height
-baseline(depends on category below it). With this visualization, we
-can compare total number of flights, decrease because of which incident,
-and we can compare various incident independently.
-
-Delayed minutes also use with time series line plot, because we can see
-which delay affecting delay overall.
+The visualization use line+scatter for the plot. The reason behind came
+from Jonathan lecture's at Dimple Chapter of Udacity. Scatter plot is
+used when we have two numerical variables, and variables in x-axis is
+independent of one another. Since it's time series, the measurement
+depend on the earlier month. Line plot is great when we want to see up
+and down of something that we want to measure for time series. But line
+plot also has its downside. We don't know how many number of data
+points, and whether the data has missing values. This will obscure the
+data. We don't do any interpolation since this month is categorical
+variable. So no hovering between month. Because of these reasons, I
+choose line+scatter plot. Readers would know when something missing in
+the data, and they can see the points so they can hover over it to get
+the tooltip.
 
 After collecting the feedback, in the first plot  I notice that number of flights delay
 doesn't really cared that much, and they just prefer to have total delay
@@ -30,11 +41,13 @@ altogether. So based on this, I will just use total number of flights
 delay. However on-time flights doesn't just decrease because of the
 delay, it's also caused by number of flights cancelled and diverted.
 
-For second plot, users confused with y-ticks. Since the title of the
-second plot said concerning about the delayed minutes, they expect
-labeled y-ticks "m" to mean minutes, while it's representing number in
-millions. Since millions minutes will waste ink more in visualization, I
-change the format to hour period.
+The original second visualization is how delay varied. One of Udacity
+reviewers gave me feedback that the visualization will still be
+exploratory, and better to show which airlines affect highest delay.
+
+I also use preattentive attribute, correlates with Gestalt's Principles. With data, Southwest Airlines stands-out from the rest (Proximity). I also add red-color and leave the rest with gray line (Similarity). I still use different color for the dots since It will easier for readers to differentiate the
+line, which represent airline.
+
 
 # Feedback
 
