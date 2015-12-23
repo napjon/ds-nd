@@ -1,41 +1,10 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-<title>code-analysis slides</title>
+<head><meta charset="utf-8" />
+<title>project</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-<!-- General and theme style sheets -->
-<link rel="stylesheet" href="reveal.js/css/reveal.css">
-<link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
-
-<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-<script>
-if( window.location.search.match( /print-pdf/gi ) ) {
-        var link = document.createElement( 'link' );
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'reveal.js/css/print/pdf.css';
-        document.getElementsByTagName( 'head' )[0].appendChild( link );
-}
-
-</script>
-
-<!--[if lt IE 9]>
-<script src="reveal.js/lib/js/html5shiv.js"></script>
-<![endif]-->
-
-<!-- Get Font-awesome from cdn -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
 
 <style type="text/css">
     /*!
@@ -145,2024 +114,34 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 
 <style type="text/css">
 /* Overrides of notebook CSS for static HTML export */
-html {
-  overflow-y: auto;
+body {
+  overflow: visible;
+  padding: 8px;
 }
-.reveal {
-  font-size: 160%;
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
 }
-.reveal pre {
-  width: inherit;
-  padding: 0.4em;
-  margin: 0px;
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-}
-.reveal pre code {
-  padding: 0px;
-}
-.reveal section img {
-  border: 0px solid black;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-}
-.reveal i {
-  font-style: normal;
-  font-family: FontAwesome;
-  font-size: 2em;
-}
-.reveal .slides {
-  text-align: left;
-}
-.reveal.fade {
-  opacity: 1;
-}
-.reveal .progress {
-  position: static;
-}
-div.input_area {
-  padding: 0.06em;
-}
-div.code_cell {
-  background-color: transparent;
-}
-div.prompt {
-  width: 11ex;
-  padding: 0.4em;
-  margin: 0px;
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-  text-align: right;
-}
-div.output_area pre {
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-}
-div.output_prompt {
-  /* 5px right shift to account for margin in parent container */
-  margin: 5px 5px 0 0;
-}
-.rendered_html p {
-  text-align: inherit;
+
+@media print {
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  } 
+  div.output_wrapper { 
+    display: block;
+    page-break-inside: avoid; 
+  }
+  div.output { 
+    display: block;
+    page-break-inside: avoid; 
+  }
 }
 </style>
 
 <!-- Custom stylesheet, it must be in the same directory as the html file -->
 <link rel="stylesheet" href="custom.css">
-
-</head>
-
-<body>
-<div class="reveal">
-<div class="slides">
-<section>
-    <section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Overview:-Free-Trial-Screener">Overview: Free Trial Screener<a class="anchor-link" href="#Overview:-Free-Trial-Screener">&#182;</a></h1>
-</div>
-</div>
-</div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>At the time of this experiment, Udacity courses currently have two options on the home page: "start free trial", and "access course materials". If the student clicks "start free trial", they will be asked to enter their credit card information, and then they will be enrolled in a free trial for the paid version of the course. After 14 days, they will automatically be charged unless they cancel first. If the student clicks "access course materials", they will be able to view the videos and take the quizzes for free, but they will not receive coaching support or a verified certificate, and they will not submit their final project for feedback.</p>
-<p>In the experiment, Udacity tested a change where if the student clicked "start free trial", they were asked how much time they had available to devote to the course. If the student indicated 5 or more hours per week, they would be taken through the checkout process as usual. If they indicated fewer than 5 hours per week, a message would appear indicating that Udacity courses usually require a greater time commitment for successful completion, and suggesting that the student might like to access the course materials for free. At this point, the student would have the option to continue enrolling in the free trial, or access the course materials for free instead. <a href="https://www.google.com/url?q=https://drive.google.com/a/knowlabs.com/file/d/0ByAfiG8HpNUMakVrS0s4cGN2TjQ/view?usp%3Dsharing&sa=D&usg=AFQjCNEGECoB6fS27szEfzRsLcsAWHVYkA">This screenshot</a> shows what the experiment looks like.</p>
-<p>The hypothesis was that this might set clearer expectations for students upfront, thus reducing the number of frustrated students who left the free trial because they didn't have enough time—without significantly reducing the number of students to continue past the free trial and eventually complete the course. If this hypothesis held true, Udacity could improve the overall student experience and improve coaches' capacity to support students who are likely to complete the course.</p>
-<p>The unit of diversion is a cookie, although if the student enrolls in the free trial, they are tracked by user-id from that point forward. The same user-id cannot enroll in the free trial twice. For users that do not enroll, their user-id is not tracked in the experiment, even if they were signed in when they visited the course overview page.</p>
-<!--TEASER_END-->
-</div>
-</div>
-</div>
-    </aside></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h3><ul>
-<li>Start free trial to allow paid version</li>
-<li>Access course materials for free</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="experiment">experiment<a class="anchor-link" href="#experiment">&#182;</a></h3><p><img src="Final Project- Experiment Screenshot.png" alt="png"></p>
-<ul>
-<li>users see this popup after click</li>
-<li>if they're not committed, warning them.</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We have two initial hypothesis.</p>
-<ul>
-<li>“..this might set clearer expectations for students upfront, thus reducing the number of frustrated students who left the free trial because they didn't have enough time”</li>
-<li>”..without significantly reducing the number of students to continue past the free trial and eventually complete the course. “</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Unit of diversion: cookie</p>
-<ul>
-<li>users in free trial tracked by user-id</li>
-<li>same user-id can't enroll in free trial twice</li>
-<li>users not enroll can't tracked.</li>
-</ul>
-
-</div>
-</div>
-</div></section>
-    </section><section>
-    <section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Experiment-Design">Experiment Design<a class="anchor-link" href="#Experiment-Design">&#182;</a></h1>
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Metric-Choice">Metric Choice<a class="anchor-link" href="#Metric-Choice">&#182;</a></h2>
-</div>
-</div>
-</div><div class="fragment" data-fragment-index="8">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Invariant-metrics">Invariant metrics<a class="anchor-link" href="#Invariant-metrics">&#182;</a></h3><ul>
-<li>Number of cookies</li>
-<li>Number of clicks</li>
-<li>Click through probability</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Sanity Check is useful when we want to make sure that the data filtered for experiment and control group is the same. This can be done using the right invariance metric. These three metrics shouldn't change because it's outside of the experiment, in a sense that these metric calculated all before the experiment begin.</p>
-<p>Number of cookies who views the page should be the same when Udacity experiment. They haven't click the "Start Now" button and see "Free Trial Screener" experiment. So number of cookies can be used as invariant metrics. When users click the button, they also haven't yet see the experiment that Udacity does, so number of clicks shouldn't change between experiment and control groups.</p>
-<p>Since the experiments only occurs <strong><em>after</em></strong> the users click the "Start Now" button, its click-through-probability also have to be the same for each experiment and control group. We know that number of cookies and number of clicks has to be the same, then click-thorough-probability also has to be the same.</p>
-<p>Besides cookie-id, there is also user-id. But user-id is not a good invariant, because Udacity also open to unregistered users to view page until after click of a button.</p>
-
-</div>
-</div>
-</div>
-    </aside><div class="fragment" data-fragment-index="10">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Evaluation-metrics">Evaluation metrics<a class="anchor-link" href="#Evaluation-metrics">&#182;</a></h3><ul>
-<li>Gross Conversion</li>
-<li>Net Conversion</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We have two initial hypothesis.</p>
-<ul>
-<li>“..this might set clearer expectations for students upfront, thus reducing the number of frustrated students who left the free trial because they didn't have enough time”</li>
-<li>”..without significantly reducing the number of students to continue past the free trial and eventually complete the course. “</li>
-</ul>
-
-</div>
-</div>
-</div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>For evaluation metrics, I choose Gross Conversion, Retention, and Net Conversion. All of these metrics are a good evaluation metrics since they change when the experiment change, and since each of the metrics has user-ids as the unit of analysis, should be much smaller standard error since Udacity also using it as the cookie of diversion.</p>
-<p>Gross conversion is the number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button. After the visitors click the button, they should see the screener, hence the warning. It should be makes other visitors that doesn't have serious commitment back down and cancel it right away.</p>
-<p>Retention is number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by number of user-ids to complete checkout. The experiment intend to focus the visitors that only want to make a serious commitment. The retention rate should be higher for experiment group than the control group.</p>
-<p>Net conversion is number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. Net Conversion also true, since the experiment intend to see higher conversion rate for students to continue (at least make one payment) than the users that only click the button, that doesn't even see the warning experiment given.</p>
-<p>Ouf of these metrics, Retention turns out have a longer duration, which is 118 days. This takes too long, and it's not something Udacity willing to give for the experiment. So Retention will be excluded.</p>
-
-</div>
-</div>
-</div>
-    </aside><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The first part is what Gross Conversion does, we should expect after the experiment, Gross Conversion shows significantly reduce the number who left trial because they don’t have time commitment. The experiment group should be significantly different than control group.
-The second part is what Net Conversion does, we should expect after experiment, the metric shows insignificantly reduce the number of students who at least make one payment.  The experiment group should not significantly different than control group.</p>
-
-</div>
-</div>
-</div>
-    </aside></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Measuring-Standard-Deviation">Measuring Standard Deviation<a class="anchor-link" href="#Measuring-Standard-Deviation">&#182;</a></h2><ul>
-<li>Gross Conversion: 0.02</li>
-<li>Net Conversion 0.0156</li>
-</ul>
-<p>Expect analytical variance match empirical variance because unit of analysis and unit of diversion is same.</p>
-
-</div>
-</div>
-</div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To calculate standard deviation, we use this formula</p>
-<div class="highlight"><pre><span class="n">Formula</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
-</pre></div>
-<p>and using baseline data below.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">baselines</span><span class="o">=</span> <span class="s">&quot;&quot;&quot;Unique cookies to view page per day:	40000</span>
-<span class="s">Unique cookies to click &quot;Start free trial&quot; per day:	3200</span>
-<span class="s">Enrollments per day:	660</span>
-<span class="s">Click-through-probability on &quot;Start free trial&quot;:	0.08</span>
-<span class="s">Probability of enrolling, given click:	0.20625</span>
-<span class="s">Probability of payment, given enroll:	0.53</span>
-<span class="s">Probability of payment, given click:	0.1093125&quot;&quot;&quot;</span>
-
-<span class="n">lines</span>  <span class="o">=</span> <span class="n">baselines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-<span class="n">d_baseline</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">])</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Since we have 5000 sample cookies instead of the original 40000, we can adjust accordingly using calculate probability. For these two evaluation metric, we need number of users who click "Start Now" button, and calculated as</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">n</span> <span class="o">=</span> <span class="mi">5000</span>
-<span class="n">n_click</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">d_baseline</span><span class="p">[</span><span class="s">&#39;Click-through-probability on &quot;Start free trial&quot;&#39;</span><span class="p">]</span>
-<span class="n">n_click</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[79]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>400.0</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Next, standard deviation for Gross conversion is</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">d_baseline</span><span class="p">[</span><span class="s">&#39;Probability of enrolling, given click&#39;</span><span class="p">]</span>
-<span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_click</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[78]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.0202</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>and for Net Conversion,</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">d_baseline</span><span class="p">[</span><span class="s">&#39;Probability of payment, given click&#39;</span><span class="p">]</span>
-<span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_click</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[77]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.0156</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Gross Conversion and Net Conversion, their empirical variance should approximate analytical variance, because the unit of analysis and unit of diversion is the same, cookie-ids/user-ids.</p>
-
-</div>
-</div>
-</div>
-    </div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Sizing">Sizing<a class="anchor-link" href="#Sizing">&#182;</a></h1>
-</div>
-</div>
-</div><div class="fragment" data-fragment-index="25">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Number-of-Samples-vs.-Power">Number of Samples vs. Power<a class="anchor-link" href="#Number-of-Samples-vs.-Power">&#182;</a></h2><ul>
-<li>Gross Conversion. Baseline: 0.20625 dmin: 0.01 = 25.839 cookies who clicks.</li>
-<li>Net Conversion. Baseline: 0.1093125 dmin: 0.0075 = 27,411 cookies who clicks.</li>
-<li>Not using Bonferroni correction.</li>
-<li>Using alpha = 0.05 and beta 0.2</li>
-</ul>
-<p>The pageviews needed then will be:
-685275 impression.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We feed it into <a href="http://www.evanmiller.org/ab-testing/sample-size.html">sample size calculator</a>.</p>
-<p>We can use bigger number, so the minimum required cookies is sufficient. The sample size is only for one group, so output from the calculator must be doubled to get the enough pageviews. Since this only the user who clicks, we calculate number of pageviews using CTP. The pageviews needed then will be:</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[89]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="p">(</span><span class="mi">27411</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">d_baseline</span><span class="p">[</span><span class="s">&#39;Click-through-probability on &quot;Start free trial&quot;&#39;</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[89]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>685275.0</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div class="fragment" data-fragment-index="28">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Duration-vs.-Exposure">Duration vs. Exposure<a class="anchor-link" href="#Duration-vs.-Exposure">&#182;</a></h2><ul>
-<li>Fraction: 0.8 (<em>Low risk</em>)</li>
-<li>Duration: 22 days (<em>40000 pageviews/day</em>)</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The fraction of experiment exposure to Udacity visitors will be 80%. The experiment isn't risky enough that may potentially leaked as blog news or article. It doesn't really big a news, as Udacity only want to put little warning to the users. Because only 40000 pageviews each day can be gathered, the duration will be 22 days.</p>
-<p>This is where Retention metric fail for our evaluation metrics. It has a longer duration, which is 118 days. This takes too long, and it's not something Udacity willing to give for the experiment. So Retention will be excluded.</p>
-
-</div>
-</div>
-</div>
-    </aside></section>
-    </section><section>
-    <section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Experiment-Analysis">Experiment Analysis<a class="anchor-link" href="#Experiment-Analysis">&#182;</a></h1>
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Sanity-Checks">Sanity Checks<a class="anchor-link" href="#Sanity-Checks">&#182;</a></h2>
-</div>
-</div>
-</div><div class="fragment" data-fragment-index="32">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><p>Number of Cookies:</p>
-<ul>
-<li>Bounds = (0.4988,0.5012)</li>
-<li>Observed = 0.5006</li>
-<li>Passes? Yes</li>
-</ul>
-</li>
-<li><p>Number of clicks on “Start free trial”:</p>
-<ul>
-<li>Bounds = (0.4959,0.5041)</li>
-<li>Observed = 0.5005</li>
-<li>Passes? Yes</li>
-</ul>
-</li>
-<li><p>Click-through-probability on “Start free trial”:</p>
-<ul>
-<li>Bounds = (0.0812,0.0830)</li>
-<li>Observed = 0.0821</li>
-<li>Passes? Yes</li>
-</ul>
-</li>
-</ul>
-<p>Since we have passed all of the sanity checks, we can continue to analyze the experiment.</p>
-
-</div>
-</div>
-</div>
-    </div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We do sanity checks to ensure that both experiment and control groups have equal proportion. It's the metric that shouldn't change when experiment change, which is invariant metrics that we chose earlier. First let's see the data that we want to analyze both at control and experiment.</p>
-
-</div>
-</div>
-</div>
-    </aside><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">control</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">&#39;control_data.csv&#39;</span><span class="p">)</span>
-<span class="n">experiment</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">&#39;experiment.csv&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">control</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Date</th>
-      <th>Pageviews</th>
-      <th>Clicks</th>
-      <th>Enrollments</th>
-      <th>Payments</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Sat, Oct 11</td>
-      <td>7723</td>
-      <td>687</td>
-      <td>134</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Sun, Oct 12</td>
-      <td>9102</td>
-      <td>779</td>
-      <td>147</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Mon, Oct 13</td>
-      <td>10511</td>
-      <td>909</td>
-      <td>167</td>
-      <td>95</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Tue, Oct 14</td>
-      <td>9871</td>
-      <td>836</td>
-      <td>156</td>
-      <td>105</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Wed, Oct 15</td>
-      <td>10014</td>
-      <td>837</td>
-      <td>163</td>
-      <td>64</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">experiment</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Date</th>
-      <th>Pageviews</th>
-      <th>Clicks</th>
-      <th>Enrollments</th>
-      <th>Payments</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Sat, Oct 11</td>
-      <td>7716</td>
-      <td>686</td>
-      <td>105</td>
-      <td>34</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Sun, Oct 12</td>
-      <td>9288</td>
-      <td>785</td>
-      <td>116</td>
-      <td>91</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Mon, Oct 13</td>
-      <td>10480</td>
-      <td>884</td>
-      <td>145</td>
-      <td>79</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Tue, Oct 14</td>
-      <td>9867</td>
-      <td>827</td>
-      <td>138</td>
-      <td>92</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Wed, Oct 15</td>
-      <td>9793</td>
-      <td>832</td>
-      <td>140</td>
-      <td>94</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Next, we count the total views and clicks for both control and experiment groups.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">control_views</span> <span class="o">=</span> <span class="n">control</span><span class="o">.</span><span class="n">Pageviews</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">control_clicks</span> <span class="o">=</span> <span class="n">control</span><span class="o">.</span><span class="n">Clicks</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="n">experiment_views</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">Pageviews</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">experiment_clicks</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">Clicks</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>For count like number of cookies and number of clicks in "Start free trial" button, we can do confidence interval around the fraction we expect in control group, and actual fraction as the observed outcome. Since we expect control and experiment to have equal proportion, we set the the expected proportion to be 0.5. Both invariant metrics, the confidence interval for sanity checks use the function below.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">def</span> <span class="nf">sanity_check_CI</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="n">experiment</span><span class="p">,</span><span class="n">expected</span><span class="p">):</span>
-    <span class="n">SE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">expected</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">expected</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">control</span> <span class="o">+</span> <span class="n">experiment</span><span class="p">))</span>
-    <span class="n">ME</span> <span class="o">=</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">SE</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">expected</span><span class="o">-</span><span class="n">ME</span><span class="p">,</span><span class="n">expected</span><span class="o">+</span><span class="n">ME</span><span class="p">)</span>
-    
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now for sanity checks confidence interval of number of cookies who views the page,</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">sanity_check_CI</span><span class="p">(</span><span class="n">control_views</span><span class="p">,</span><span class="n">experiment_views</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[42]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(0.49882039214902313, 0.50117960785097693)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The actual proportion is</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="nb">float</span><span class="p">(</span><span class="n">control_views</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">control_views</span><span class="o">+</span><span class="n">experiment_views</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[60]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.5006396668806133</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Since we know that 0.5006 is within the interval, then experiment pass sanity checks for number of cookies.</p>
-<p>Next, we calculate confidence interval of number of clicks at "Start free trial" button.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">sanity_check_CI</span><span class="p">(</span><span class="n">control_clicks</span><span class="p">,</span><span class="n">experiment_clicks</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[44]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(0.49588449572378945, 0.50411550427621055)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>And the actual proportion,</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="nb">float</span><span class="p">(</span><span class="n">control_clicks</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">control_clicks</span><span class="o">+</span><span class="n">experiment_clicks</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[61]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.5004673474066628</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Again 0.5006 is within the interval, so our experiment also pass the sanity check.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>For our sanity check with ctp, is a little different calculation. Using simple count earlier, we know that if we setup our experiment in a proper way, the true proportion of control group should be 0.5. Since we don't know the true proportion of ctp control group, we build confidence interval around the control group, and ctp experiment as observed outcome. If the experiment change and ctp experiment is outside ctp control confidence interval, then our experiment failed sanity checks. Thus we can't continue our analysis.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">ctp_control</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">control_clicks</span><span class="p">)</span><span class="o">/</span><span class="n">control_views</span>
-<span class="n">ctp_experiment</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">experiment_clicks</span><span class="p">)</span><span class="o">/</span><span class="n">experiment_views</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># %%R</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mi">28378</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">345543</span>
-<span class="n">CL</span> <span class="o">=</span> <span class="mf">0.95</span>
-
-<span class="n">pe</span> <span class="o">=</span> <span class="n">c</span><span class="o">/</span><span class="n">n</span>
-<span class="n">SE</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pe</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">pe</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
-<span class="n">z_star</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">qnorm</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">CL</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">lower</span><span class="o">.</span><span class="n">tail</span><span class="o">=</span><span class="n">F</span><span class="p">),</span><span class="n">digits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ME</span> <span class="o">=</span> <span class="n">z_star</span> <span class="o">*</span> <span class="n">SE</span>
-
-<span class="n">c</span><span class="p">(</span><span class="n">pe</span><span class="o">-</span><span class="n">ME</span><span class="p">,</span> <span class="n">pe</span><span class="o">+</span><span class="n">ME</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[3]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<ol class=list-inline>
-	<li>0.0812103597525297</li>
-	<li>0.0830412673966239</li>
-</ol>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">ctp_experiment</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.082125813574576823</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>And as you can see, click-through-probability of the experiment is still within the confidence interval of click-through-probability control groups. Since we have passed all of the sanity checks, we can continue to analyze the experiment.</p>
-
-</div>
-</div>
-</div>
-    </div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Effect-Size-Test">Effect Size Test<a class="anchor-link" href="#Effect-Size-Test">&#182;</a></h1>
-</div>
-</div>
-</div><div class="fragment" data-fragment-index="56">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Did not use Bonferroni correction</li>
-<li>Gross Conversion<ul>
-<li>Bounds =  (-0.0291, -0.0120)</li>
-<li>Statistical Significance? Yes</li>
-<li>Practical Significance? Yes</li>
-</ul>
-</li>
-<li>Net Conversion<ul>
-<li>Bounds =  (-0.0116,0.0019)</li>
-<li>Statistical Significance? No</li>
-<li>Practical Significance? No</li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">get_gross</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">group</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">Enrollments</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">/</span> <span class="n">group</span><span class="o">.</span><span class="n">Clicks</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">get_net</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">group</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">Payments</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">/</span> <span class="n">group</span><span class="o">.</span><span class="n">Clicks</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Gross-Conversion">Gross Conversion<a class="anchor-link" href="#Gross-Conversion">&#182;</a></h3>
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Keep in mind that observed_difference can be negative</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">print</span><span class="p">(</span><span class="s">&#39;N_cont = </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">control</span>.dropna().Clicks.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;X_cont = </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">control</span>.dropna().Enrollments.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;N_exp =  </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">experiment</span>.dropna().Clicks.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;X_exp =  </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">experiment</span>.dropna().Enrollments.sum())
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>N_cont = 17293
-X_cont = 3785
-N_exp =  17260
-X_exp =  3423
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">X_exp</span><span class="o">/</span><span class="n">N_exp</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[3]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-0.198319814600232
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">X_cont</span><span class="o">/</span><span class="n">N_cont</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-0.218874689180593
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">#%%R</span>
-
-<span class="n">N_cont</span> <span class="o">=</span> <span class="mi">17293</span>
-<span class="n">X_cont</span> <span class="o">=</span> <span class="mi">3785</span>
-<span class="n">N_exp</span> <span class="o">=</span> <span class="mi">17260</span>
-<span class="n">X_exp</span> <span class="o">=</span> <span class="mi">3423</span>
-
-<span class="n">observed_diff</span> <span class="o">=</span> <span class="n">X_exp</span><span class="o">/</span><span class="n">N_exp</span> <span class="o">-</span> <span class="n">X_cont</span><span class="o">/</span><span class="n">N_cont</span>
-<span class="c"># print(observed_diff)</span>
-<span class="n">p_pool</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_cont</span><span class="o">+</span><span class="n">X_exp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">N_cont</span><span class="o">+</span><span class="n">N_exp</span><span class="p">)</span>
-<span class="n">SE</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">p_pool</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p_pool</span><span class="p">))</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">N_cont</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">N_exp</span><span class="p">)))</span>
-<span class="n">ME</span> <span class="o">=</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">SE</span>
-<span class="c"># print(p_pool)</span>
-<span class="n">c</span><span class="p">(</span><span class="n">observed_diff</span><span class="o">-</span><span class="n">ME</span><span class="p">,</span> <span class="n">observed_diff</span><span class="o">+</span><span class="n">ME</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[1]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<ol class=list-inline>
-	<li>-0.0291233583354044</li>
-	<li>-0.0119863908253187</li>
-</ol>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">observed_diff</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
--0.0205548745803616
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The observed difference is outside the confidence interval. And the observed difference also above 0.01 dmin, minimum detectable effect. We should definitely launch.</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Net-Conversion">Net Conversion<a class="anchor-link" href="#Net-Conversion">&#182;</a></h3>
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">print</span><span class="p">(</span><span class="s">&#39;N_cont = </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">control</span>.dropna().Clicks.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;X_cont = </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">control</span>.dropna().Payments.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;N_exp =  </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">experiment</span>.dropna().Clicks.sum())
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;X_exp =  </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="k">experiment</span>.dropna().Payments.sum())
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>N_cont = 17293
-X_cont = 2033
-N_exp =  17260
-X_exp =  1945
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">X_exp</span><span class="o">/</span><span class="n">N_exp</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-0.198319814600232
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">X_cont</span><span class="o">/</span><span class="n">N_cont</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-0.218874689180593
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">#%%R</span>
-<span class="n">N_cont</span> <span class="o">=</span> <span class="mi">17293</span>
-<span class="n">X_cont</span> <span class="o">=</span> <span class="mi">2033</span>
-<span class="n">N_exp</span> <span class="o">=</span> <span class="mi">17260</span>
-<span class="n">X_exp</span> <span class="o">=</span> <span class="mi">1945</span>
-
-<span class="n">observed_diff</span> <span class="o">=</span> <span class="n">X_exp</span><span class="o">/</span><span class="n">N_exp</span> <span class="o">-</span> <span class="n">X_cont</span><span class="o">/</span><span class="n">N_cont</span>
-<span class="c"># print(observed_diff)</span>
-<span class="n">p_pool</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_cont</span><span class="o">+</span><span class="n">X_exp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">N_cont</span><span class="o">+</span><span class="n">N_exp</span><span class="p">)</span>
-<span class="n">SE</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">p_pool</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p_pool</span><span class="p">))</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">N_cont</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">N_exp</span><span class="p">)))</span>
-<span class="n">ME</span> <span class="o">=</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">SE</span>
-<span class="c"># print(p_pool)</span>
-<span class="n">c</span><span class="p">(</span><span class="n">observed_diff</span><span class="o">-</span><span class="n">ME</span><span class="p">,</span> <span class="n">observed_diff</span><span class="o">+</span><span class="n">ME</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[11]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<ol class=list-inline>
-	<li>-0.0116046243598917</li>
-	<li>0.00185717901080338</li>
-</ol>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">observed_diff</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
-
-<div class="output_html rendered_html output_subarea output_execute_result">
--0.00487372267454417
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The observed difference is within the confidence interval so it's not statiscally significant and also not practically significant. We may fail or continue with our results.</p>
-
-</div>
-</div>
-</div>
-    </aside></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Sign-Test">Sign Test<a class="anchor-link" href="#Sign-Test">&#182;</a></h1>
-</div>
-</div>
-</div><div class="fragment" data-fragment-index="74">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Did not use Bonferroni correction</li>
-<li>Gross Conversion<ul>
-<li>p-value = 0.0026</li>
-<li>Statistical Significance? Yes</li>
-</ul>
-</li>
-<li>Net Conversion<ul>
-<li>p-value = 0.6776</li>
-<li>Statistical Significance? No</li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Sign Test is also a test that must be confirmed with effect size test. I'm using <a href="http://graphpad.com/quickcalcs/binomial1.cfm">Online Calculator</a> to calculate the  binomial p-value, whether the probability of experiment is higher than control groups. If we simulate it, what ar the odds. If the probability is so rare, that isn't likely due to chance, then the experiment succeed, provided significance level, which I choose to be 5%.</p>
-<p>I'm using helper function, to compare probability day-to-day whether the metric in question is smaller for group than the experiment.</p>
-
-</div>
-</div>
-</div>
-    </aside><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">compare_prob</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="p">((</span><span class="n">control</span><span class="o">.</span><span class="n">dropna</span><span class="p">()[</span><span class="n">col</span><span class="p">]</span> <span class="o">/</span> <span class="n">control</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">Clicks</span><span class="p">)</span> <span class="o">&lt;</span>
-                            <span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">dropna</span><span class="p">()[</span><span class="n">col</span><span class="p">]</span><span class="o">/</span><span class="n">experiment</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">Clicks</span><span class="p">))</span>
-                                   
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Gross-Conversion">Gross Conversion<a class="anchor-link" href="#Gross-Conversion">&#182;</a></h3>
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Count the gross conversion, I got,</p>
-
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">compare_prob</span><span class="p">(</span><span class="s">&#39;Enrollments&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>False    19
-True      4
-dtype: int64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Net-Conversion">Net Conversion<a class="anchor-link" href="#Net-Conversion">&#182;</a></h3>
-</div>
-</div>
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">compare_prob</span><span class="p">(</span><span class="s">&#39;Payments&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>False    13
-True     10
-dtype: int64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    </div><div style=display:none>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I got p-value of 0.6776 for Net Conversion.</p>
-
-</div>
-</div>
-</div>
-    </div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h3>
-</div>
-</div>
-</div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I would not use Bonferroni correction in this case. Bonferroni correction needs all metrics to be significantly different. This is not what we do in our experiment. We have Gross Conversion that need to be significant, and Net Conversion that need to be insignificant.</p>
-
-</div>
-</div>
-</div>
-    </aside><div class="fragment" data-fragment-index="85">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Not use Benferroni correction.</li>
-<li>Gross Conversion need significant but Net Conversion doesn't.</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div></section>
-    </section><section>
-    <section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Recommendation">Recommendation<a class="anchor-link" href="#Recommendation">&#182;</a></h2>
-</div>
-</div>
-</div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Gross Conversion is good because it passes Udacity’s practical significance boundary. This means it reduces the number of students who feel not committed (in time/cost). However, even though Net Conversion is not statistically significance, its confidence interval touch practical significance boundary, which is not how Udacity wants. Udacity could lose potential money if the experiment launch. So my recommendation is further experiment or cancel if Udacity doesn’t have a time.</p>
-
-</div>
-</div>
-</div>
-    </aside><div class="fragment" data-fragment-index="88">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Gross Conversion: pass</li>
-<li><p>Net Conversion: somehow pass, can loss potential money</p>
-</li>
-<li><p>decision: risky. delay for further experiment or cancel the launch.</p>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-    </div></section>
-    </section><section>
-    <section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Follow-Up-Experiment">Follow-Up Experiment<a class="anchor-link" href="#Follow-Up-Experiment">&#182;</a></h1>
-</div>
-</div>
-</div><aside class="notes">
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>So what does it take to decrease not-so-serious users without losing potential money? I see that on every course overview page in Udacity, they already given information about the hours spent on particular course. So really, warning them again about time commitment might be unnecessary. What we could do, is giving them an incentive after their enrollment.
-In an experiment, after the students enroll, they are given an information on the right side of the video material page. An incentive of offering free payment until they graduate. The deal is they have to be Udacity Code Reviewer. Udacity has this program. It gives reasonable payment per hour to whoever graduates reviewing the students' code.  If they agree, they can click the button “Start debt program” below the information page.</p>
-<p>They will be able to continue after 14-day boundary and finished the course. But in return, they have to be Code Reviewer, and finish the debt through payroll. They won't be given any salary until their debt finished.</p>
-<p>Yes, it seems risky to Udacity.  But if the users break on their agreement, for example not become Code Reviewer within two months, they will be automatically charged through their registered credit card. They will also automatically charged if they cancel the program.  So it’s safe to assume that we have handled risk of potential runner, but this is not part of the experiment.</p>
-<p>The hypothesis is that after they’re given an incentive, they become more serious and committed  to complete the course. By doing this incentive, number of users who cancel early in the course is also significantly reduced, and boost them compared to ones which already committed.</p>
-<p>The unit of diversion is an user-id. Like free trial, the same user-id can’t follow the debt program twice. User-id is more cross-platform and more represent as an user than a cookie. User-ids that don’t enroll in the program, is not tracked in the experiment. The number of user-ids that are in debt program, but cancel at the end of the free trial is also not tracked.</p>
-
-</div>
-</div>
-</div>
-    </aside></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Not necessary to show warning</li>
-<li>Start Debt Program</li>
-<li>Risky, users break agreement<ul>
-<li>Not become Udacity Code Reviewer</li>
-<li>Cancel in midway program</li>
-</ul>
-</li>
-<li>Hypothesis<ul>
-<li>Non-serious users become more committed after incentive</li>
-<li>Number of users who cancel early is reduced</li>
-<li>Boost compared to already committed</li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We can use Invariant metrics for this experiment for the follow-up:</p>
-<ul>
-<li><strong>Number of cookies</strong>: That is, number of unique cookies to view the course overview page.</li>
-<li><strong>Number of clicks</strong>: That is, number of unique cookies to click the "Start free trial" button (which happens before the free trial screener is trigger).</li>
-<li><strong>Click-through-probability</strong>: That is, number of unique cookies to click the "Start free trial" button divided by number of unique cookies to view the course overview page</li>
-<li><strong>Gross conversion</strong>: That is, number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button.</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>And the evaluation metric:</p>
-<ul>
-<li><strong>Debt Conversion</strong>: That is, number of user-ids to click “Start Debt Program” divided by number of user-ids that enroll in the free trial.</li>
-<li><strong>Debt-Net conversion</strong>: That is, number of user-ids to click “Start Debt Program” divided by number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment)</li>
-<li><strong>Net conversion</strong>: That is, number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button.</li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We use user-ids as unit of diversion, expect all of the evaluation metrics to be practically significant.</p>
-
-</div>
-</div>
-</div></section>
-    </section>
-</div>
-</div>
-
-<script src="reveal.js/lib/js/head.min.js"></script>
-
-<script src="reveal.js/js/reveal.js"></script>
-
-<script>
-
-// Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-Reveal.initialize({
-controls: true,
-progress: true,
-history: true,
-
-theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
-
-// Optional libraries used to extend on reveal.js
-dependencies: [
-{ src: "reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
-{ src: "reveal.js/plugin/notes/notes.js", async: true, condition: function() { return !!document.body.classList; } }
-]
-});
-</script>
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
@@ -2185,15 +164,792 @@ dependencies: [
         }
     });
     </script>
-    <!-- End of mathjax configuration -->
+    <!-- End of mathjax configuration --></head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
 
-<script>
-Reveal.addEventListener( 'slidechanged', function( event ) {
-  window.scrollTo(0,0);
-  MathJax.Hub.Rerender(event.currentSlide);
-});
-</script>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In a Stroop task, participants are presented with a list of words, with each word displayed in a color of ink. The participant’s task is to say out loud the color of the ink in which the word is printed. The task has two conditions: a congruent words condition, and an incongruent words condition. In the congruent words condition, the words being displayed are color words whose names match the colors in which they are printed: for example RED, BLUE. In the incongruent words condition, the words displayed are color words whose names do not match the colors in which they are printed: for example PURPLE, ORANGE. In each case, we measure the time it takes to name the ink colors in equally-sized lists. Each participant will go through and record a time from each condition.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">&#39;stroopdata.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">&#39;diff&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">&#39;Incongruent&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s">&#39;Congruent&#39;</span><span class="p">]</span>
+<span class="n">df</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[3]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Congruent</th>
+      <th>Incongruent</th>
+      <th>diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>12.079</td>
+      <td>19.278</td>
+      <td>7.199</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>16.791</td>
+      <td>18.741</td>
+      <td>1.950</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9.564</td>
+      <td>21.214</td>
+      <td>11.650</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>8.630</td>
+      <td>15.687</td>
+      <td>7.057</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>14.669</td>
+      <td>22.803</td>
+      <td>8.134</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>12.238</td>
+      <td>20.878</td>
+      <td>8.640</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>14.692</td>
+      <td>24.572</td>
+      <td>9.880</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8.987</td>
+      <td>17.394</td>
+      <td>8.407</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9.401</td>
+      <td>20.762</td>
+      <td>11.361</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>14.480</td>
+      <td>26.282</td>
+      <td>11.802</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>22.328</td>
+      <td>24.524</td>
+      <td>2.196</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>15.298</td>
+      <td>18.644</td>
+      <td>3.346</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>15.073</td>
+      <td>17.510</td>
+      <td>2.437</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>16.929</td>
+      <td>20.330</td>
+      <td>3.401</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>18.200</td>
+      <td>35.255</td>
+      <td>17.055</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>12.130</td>
+      <td>22.158</td>
+      <td>10.028</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>18.495</td>
+      <td>25.139</td>
+      <td>6.644</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>10.639</td>
+      <td>20.429</td>
+      <td>9.790</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>11.344</td>
+      <td>17.425</td>
+      <td>6.081</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>12.369</td>
+      <td>34.288</td>
+      <td>21.919</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>12.944</td>
+      <td>23.894</td>
+      <td>10.950</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>14.233</td>
+      <td>17.960</td>
+      <td>3.727</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>19.710</td>
+      <td>22.058</td>
+      <td>2.348</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>16.004</td>
+      <td>21.157</td>
+      <td>5.153</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The experiment takes participants with two test, congruent task and incongruent task. Congruent task is word with agreeing text and font color, while incongruent is a different text and its font color. Both of the task require the participants to say it out loud the word that are being display, and press 'Finish' button to see which time do they take. The control group is the congruent task, while experiment group is ingconruent task.</p>
+<p>The independent variables is which makes differ between congruent task and incongruent task. <strong><em>That is words that are being displayed</em></strong>. Participants are requested to say the font color of the words, which is the same for both control and experiment group. But while text displayed agree with color in congruent, incongruent is the other way around.</p>
+<p><strong><em>The dependent variables is time participants take to complete the task</em></strong>. The time is depend on whether the text agree with the font color being displayed. We can see that from the data, on average, the time participants took for incongruent task is different than when they solve congruent task. We will use statistical test to test whether the time is significantly different.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So what kind of paired data should we be asking? We know that in general Incongruent task take longer than Congruent task. So in Confidence Interval, we could be asking the interval in which Ingrouent takes more second than congruent, and in hypothesis we could be asking is whether the incongruent task results in significantly different than congruent task.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Our sample size is less than 30, and that would means that our sampling distribution won't be normal. We're faced with two conditions, using t-test or bootstrapping. In this case, We will be using t-test. And since this is an experiment (assumed random assignment), we can draw causation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the instructions, it doesn't stated anywhere how the participants are collected. There might be a convenience bias(only participants that know the experiment), location bias(city/country where the experiment performed ), or voluntarily bias. Assumed participants randomly sampled without any bias at all. The result of this experiment can be generalized to world population.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We design the hypothesis test as follows:</p>
+<p>H0: $ \mu_\mathbf{congruent} = \mu_\mathbf{incongruent}$ The time took for population to solve both congruent task and incongruent task is the same, on average</p>
+<p>HA:$\mu_\mathbf{congruent} \neq \mu_\mathbf{incongruent}$ The time took for population to solve both congruent task and incongruent task is different, on average</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We're going to use <strong>two-sided</strong> t-statistics. This is an experiment where we have limited data and samples, and we want to test our hypothesis to the population parameters.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[28]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Congruent</th>
+      <th>Incongruent</th>
+      <th>diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>24.000000</td>
+      <td>24.000000</td>
+      <td>24.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>14.051125</td>
+      <td>22.015917</td>
+      <td>7.964792</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>3.559358</td>
+      <td>4.797057</td>
+      <td>4.864827</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>8.630000</td>
+      <td>15.687000</td>
+      <td>1.950000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>11.895250</td>
+      <td>18.716750</td>
+      <td>3.645500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>14.356500</td>
+      <td>21.017500</td>
+      <td>7.666500</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>16.200750</td>
+      <td>24.051500</td>
+      <td>10.258500</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>22.328000</td>
+      <td>35.255000</td>
+      <td>21.919000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The measure of tendency that will be used in this situation is mean, and measure of variability is standard deviation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#39;Congruent&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s">&#39;Incongruent&#39;</span><span class="p">);</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+gg==
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The plot shown a moderaly weak correlation between congruent variable and incongruent variable.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Incongruent</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">Congruent</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">();</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that is the difference is right skewed distribution. This makes sense, since congruent task is easier, there shouldn't be any participants that solve incongruent task shorter tha congruent task. And it should be the longer time it took for the participants at solving incongruent task, the less should be for the number of participants.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hypothesis-Testing">Hypothesis Testing<a class="anchor-link" href="#Hypothesis-Testing">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="o">%%</span>R
+
+n <span class="o">=</span> <span class="m">24</span>
+mu <span class="o">=</span> <span class="m">7.964792</span>
+s <span class="o">=</span> <span class="m">4.864827</span>
+CL <span class="o">=</span> <span class="m">0.95</span>
+n <span class="o">=</span> <span class="m">24</span>
+<span class="c1"># z = round(qnorm((1-CL)/2, lower.tail=F),digits=2)</span>
+SE <span class="o">=</span> s<span class="o">/</span><span class="kp">sqrt</span><span class="p">(</span>n<span class="p">)</span>
+t <span class="o">=</span> mu<span class="o">/</span>SE
+t_crit <span class="o">=</span> <span class="kp">round</span><span class="p">(</span>qt<span class="p">((</span><span class="m">1</span><span class="o">-</span>CL<span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">,</span>df<span class="o">=</span>n<span class="m">-1</span><span class="p">),</span>digits<span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="kt">c</span><span class="p">(</span><span class="kp">t</span><span class="p">,</span><span class="kt">c</span><span class="p">(</span><span class="o">-</span>t_crit<span class="p">,</span>t_crit<span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_text output_subarea ">
+<pre>[1]  8.020707  2.069000 -2.069000
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since our t-statistics, 8.02 is higher than the t critical values, we can conclude that the data provides convincing evidence that the time participants took for incongruent task is significantly different than when they took congruent task.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Confidence-Interval">Confidence Interval<a class="anchor-link" href="#Confidence-Interval">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="o">%%</span>R
+
+ME <span class="o">=</span> <span class="kp">t</span><span class="o">*</span>SE
+<span class="kt">c</span><span class="p">(</span>mu<span class="o">+</span>ME<span class="p">,</span>mu<span class="o">-</span>ME<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_text output_subarea ">
+<pre>[1]  5.910216 10.019368
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we are 95% confident that participants on average, took incongruent task 5.91 to 10.02 seconds longer than congruent task. Since this is an experimental design, we can draw causation intead of correlation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p><strong><em>REFERENCES</em></strong>:</p>
+<ul>
+<li><a href="http://napitupulu-jon.appspot.com/posts/paired-data-coursera-statistics.html">http://napitupulu-jon.appspot.com/posts/paired-data-coursera-statistics.html</a></li>
+<li><a href="http://napitupulu-jon.appspot.com/posts/inference-means-anova.html">http://napitupulu-jon.appspot.com/posts/inference-means-anova.html</a></li>
+<li><a href="https://www.udacity.com/course/viewer#!/c-ud134-nd/l-4578095863/e-147019342/m-147300501">https://www.udacity.com/course/viewer#!/c-ud134-nd/l-4578095863/e-147019342/m-147300501</a></li>
+</ul>
+</blockquote>
+
+</div>
+</div>
+</div>
+    </div>
+  </div>
 </body>
-
 </html>
