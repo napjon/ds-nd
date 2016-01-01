@@ -46,7 +46,7 @@ The original second visualization is how delay varied. One of Udacity
 reviewers gave me feedback that the visualization will still be
 exploratory, and better to show which airlines affect highest delay.
 
-I also use preattentive attribute, correlates with Gestalt's Principles. With data, Southwest Airlines stands-out from the rest (Proximity). I also add red-color and leave the rest with gray line (Similarity). I still use different color for the dots since It will easier for readers to differentiate the
+I also use preattentive attribute, correlates with Gestalt's Principles. With data, Hawaiian Airlines stands-out from the rest (Proximity). I also add red-color and leave the rest with gray line (Similarity). I still use different color for the dots since It will easier for readers to differentiate the
 line, which represent airline.
 
 

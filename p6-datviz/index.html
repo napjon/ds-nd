@@ -19,7 +19,7 @@
   }
 
   /*Change the Southwest Airlines  to red so it stand out among the rest*/
-  path.dimple-southwest-airlines-co-{
+  path.dimple-hawaiian-airlines-inc-{
     stroke: red;
   }
  h2 {
@@ -32,12 +32,13 @@
 
 
       function appendTitle(title){
+        //Take title(string) as an input to append title to the chart
         return d3.select("body")
                 .append("h2")
                 .text(title);
       }
 
-      //Append SVG Element, with predefined size. This will affect both graph.
+      //Append SVG Element, with predefined margin. This will affect both graph.
       function appendSVG(){
               var margin = 75,
               width = 1400 - margin,
@@ -51,8 +52,11 @@
                     .attr('class','chart');
       }
 
-      //Get the baseline chart. This will create time series chart, and its correlated measure axis
+      
       function getBaselineChart(data,x_col,y_col){
+        //Take the data which contains x_col to be as an x axis, and y_col to be as an y_axis
+        //Get the baseline chart. This will create time series chart, and its correlated measure axis
+        //Return baseline chart, time-series of x-axis, and y-axis(Measure Axis)
             var svg = appendSVG();
             var chart = new dimple.chart(svg, data);
             var x = chart.addTimeAxis("x", x_col, "%m", "%b");
@@ -64,27 +68,34 @@
 
 
       function drawFlight(data) {
+        //Receive number of on time flight and various kind of delay as data
+        //Draw a time series chart, representing number of on time flight performance
+        //and how it decrease based on kind of delay.
       
           "use strict";
-          appendTitle("Total US Flight Operations 2015");
+          appendTitle("Total US Flight Operations 2015"); //append tittle to the svg
           
-          var baselines = getBaselineChart(data,"month","on_time_flights");
-          var chart = baselines[0];
-          var x = baselines[1];
-          var y = baselines[2];
+          var baselines = getBaselineChart(data,"month","on_time_flights"); //See explanation in the following.
+          var chart = baselines[0]; //Get the baseline chart
+          var x = baselines[1]; // Get the x axis, time series
+          var y = baselines[2]; //Get the y axis, number of on time flights
           y.title = "Number of Flight Operations";
 
           var otf_ser = chart.addSeries("On Time Flights", dimple.plot.line);
-          otf_ser.lineMarkers = true;
+          otf_ser.lineMarkers = true; //Append dot as additional scatter plot
 
           function addFlightMeasure(col, label){
+            //This function will take column values and what label to represent in the chart.
+            //Will add series(Measure Axis) to predefine Axis. In this case y-axis, number of on time flights
+            //Output nothing, except element(measureaxis) appended to the y-axis
+
             var y_add = chart.addMeasureAxis(y, col);
             var ser = chart.addSeries(label, dimple.plot.line, [x,y_add]);
             ser.lineMarkers = true;
           }
 
           // Add additional causes that makes number  of on time flights decreased.
-          addFlightMeasure("arr_cancelled", "Cancelled Flights");
+          addFlightMeasure("arr_cancelled", "Cancelled Flights"); 
           addFlightMeasure("arr_del15", "Delayed(>15min) Flights");
           addFlightMeasure("arr_diverted", "Diverted Flights");
           var legend = chart.addLegend("10%,20px",10,"left");
@@ -95,22 +106,25 @@
 
 
       function drawCarrierDelay(data){
+        //Receive carrier name, month, delayed minutes per delayed flight as data.
+        //Draw a chart of time series, representing average number of delay minutes per delayed flight
+        //with hue based on different carrier
 
         "use strict";
-        appendTitle("Delay Flights Based on Carrier");
-        var baselines = getBaselineChart(data,"month","arr_delay");
-        var chart = baselines[0];
-        var x = baselines[1];
-        var y = baselines[2];
-        y.title = "Delay in Minutes";
-        var carr_ser = chart.addSeries("carrier_name",dimple.plot.line);
-        carr_ser.lineMarkers = true;
+        appendTitle("Average Delay Minutes per Flight Based on Carrier"); //Append title to the svg
+        var baselines = getBaselineChart(data,"month","delay_minutes_per_delayed_flight"); //See explanation in the following
+        var chart = baselines[0]; // Get the baseline chart
+        var x = baselines[1]; //Get the x-axis, time series data
+        var y = baselines[2]; //Get the y-axis, delay minutes per delayed flight
+        y.title = "Delay in Minutes per Delayed Flight";
+        var carr_ser = chart.addSeries("carrier_name",dimple.plot.line); //Add hue of line plot based on carrier
+        carr_ser.lineMarkers = true;//Append dot as additional scatter plot
 
         //Manually add legend (text and red color) just for Southwest Airlines
 
         chart.svg
         .append("text")
-        .text("Southwest Airlines")
+        .text("Hawaiian Airlines")
         .attr("class","legend-southwest")
         .attr("x",180)
         .attr("y", 20)
