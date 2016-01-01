@@ -89,9 +89,9 @@
             //Will add series(Measure Axis) to predefine Axis. In this case y-axis, number of on time flights
             //Output nothing, except element(measureaxis) appended to the y-axis
 
-            var y_add = chart.addMeasureAxis(y, col);
-            var ser = chart.addSeries(label, dimple.plot.line, [x,y_add]);
-            ser.lineMarkers = true;
+            var y_add = chart.addMeasureAxis(y, col); //Add Measure axis based on the plot
+            var ser = chart.addSeries(label, dimple.plot.line, [x,y_add]); //Add line plot of the measure axis
+            ser.lineMarkers = true; //Add additional dot as scatter plot
           }
 
           // Add additional causes that makes number  of on time flights decreased.
