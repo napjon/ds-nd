@@ -1,137 +1,137 @@
-carrier_name,month,arr_delay
-Alaska Airlines Inc.,1,1695.89830508
-Alaska Airlines Inc.,2,1537.17241379
-Alaska Airlines Inc.,3,1693.6
-Alaska Airlines Inc.,4,1143.45
-Alaska Airlines Inc.,5,1144.7
-Alaska Airlines Inc.,6,1421.79365079
-Alaska Airlines Inc.,7,1634.27419355
-Alaska Airlines Inc.,8,1947.0952381
-Alaska Airlines Inc.,9,1166.59016393
-Alaska Airlines Inc.,10,1133.01587302
-American Airlines Inc.,1,6858.01234568
-American Airlines Inc.,2,6270.7875
-American Airlines Inc.,3,6951.26829268
-American Airlines Inc.,4,7020.7125
-American Airlines Inc.,5,7552.76315789
-American Airlines Inc.,6,8538.61538462
-American Airlines Inc.,7,10499.1860465
-American Airlines Inc.,8,10150.5764706
-American Airlines Inc.,9,6309.81818182
-American Airlines Inc.,10,6614.51685393
-Delta Air Lines Inc.,1,3168.67586207
-Delta Air Lines Inc.,2,5143.44520548
-Delta Air Lines Inc.,3,4662.76923077
-Delta Air Lines Inc.,4,3731.46853147
-Delta Air Lines Inc.,5,4286.02027027
-Delta Air Lines Inc.,6,5771.64900662
-Delta Air Lines Inc.,7,4978.17241379
-Delta Air Lines Inc.,8,4728.92465753
-Delta Air Lines Inc.,9,2570.7260274
-Delta Air Lines Inc.,10,2317.23776224
-Envoy Air,1,4930.85245902
-Envoy Air,2,4604.48360656
-Envoy Air,3,3391.6147541
-Envoy Air,4,2613.17241379
-Envoy Air,5,2676.87068966
-Envoy Air,6,3042.2295082
-Envoy Air,7,2432.51304348
-Envoy Air,8,2144.43362832
-Envoy Air,9,1563.97222222
-Envoy Air,10,1356.50909091
-ExpressJet Airlines Inc.,1,3995.38554217
-ExpressJet Airlines Inc.,2,3709.12941176
-ExpressJet Airlines Inc.,3,3743.78443114
-ExpressJet Airlines Inc.,4,3080.56626506
-ExpressJet Airlines Inc.,5,4083.91304348
-ExpressJet Airlines Inc.,6,4946.10285714
-ExpressJet Airlines Inc.,7,3660.68674699
-ExpressJet Airlines Inc.,8,3253.36969697
-ExpressJet Airlines Inc.,9,2145.225
-ExpressJet Airlines Inc.,10,2445.89873418
-Frontier Airlines Inc.,1,2374.88888889
-Frontier Airlines Inc.,2,3419.33333333
-Frontier Airlines Inc.,3,3096.92156863
-Frontier Airlines Inc.,4,2115.59259259
-Frontier Airlines Inc.,5,2805.59183673
-Frontier Airlines Inc.,6,3767.02040816
-Frontier Airlines Inc.,7,3003.57142857
-Frontier Airlines Inc.,8,2320.67346939
-Frontier Airlines Inc.,9,1508.59183673
-Frontier Airlines Inc.,10,1284.42857143
-Hawaiian Airlines Inc.,1,2092.0
-Hawaiian Airlines Inc.,2,2332.29411765
-Hawaiian Airlines Inc.,3,1734.47058824
-Hawaiian Airlines Inc.,4,880.764705882
-Hawaiian Airlines Inc.,5,1270.94117647
-Hawaiian Airlines Inc.,6,1285.47058824
-Hawaiian Airlines Inc.,7,1772.17647059
-Hawaiian Airlines Inc.,8,3460.58823529
-Hawaiian Airlines Inc.,9,2175.11764706
-Hawaiian Airlines Inc.,10,1253.47058824
-JetBlue Airways,1,4845.71929825
-JetBlue Airways,2,7430.36842105
-JetBlue Airways,3,6854.85964912
-JetBlue Airways,4,4244.48275862
-JetBlue Airways,5,3397.4516129
-JetBlue Airways,6,4831.23809524
-JetBlue Airways,7,5007.26984127
-JetBlue Airways,8,5938.80952381
-JetBlue Airways,9,3569.42857143
-JetBlue Airways,10,3480.2295082
-SkyWest Airlines Inc.,1,4161.14772727
-SkyWest Airlines Inc.,2,3583.04651163
-SkyWest Airlines Inc.,3,2716.0
-SkyWest Airlines Inc.,4,2562.71511628
-SkyWest Airlines Inc.,5,2755.9704142
-SkyWest Airlines Inc.,6,3623.71022727
-SkyWest Airlines Inc.,7,3656.36904762
-SkyWest Airlines Inc.,8,3183.23563218
-SkyWest Airlines Inc.,9,2087.22905028
-SkyWest Airlines Inc.,10,2112.84883721
-Southwest Airlines Co.,1,10574.0581395
-Southwest Airlines Co.,2,9343.52325581
-Southwest Airlines Co.,3,11464.9418605
-Southwest Airlines Co.,4,10550.9767442
-Southwest Airlines Co.,5,13773.8837209
-Southwest Airlines Co.,6,18300.2209302
-Southwest Airlines Co.,7,18942.5348837
-Southwest Airlines Co.,8,13740.1395349
-Southwest Airlines Co.,9,6698.97674419
-Southwest Airlines Co.,10,7177.86046512
-Spirit Air Lines,1,4239.06060606
-Spirit Air Lines,2,4897.45454545
-Spirit Air Lines,3,4216.44117647
-Spirit Air Lines,4,3694.70588235
-Spirit Air Lines,5,7665.75757576
-Spirit Air Lines,6,10753.2727273
-Spirit Air Lines,7,5670.06060606
-Spirit Air Lines,8,7418.45454545
-Spirit Air Lines,9,3898.24242424
-Spirit Air Lines,10,3690.3125
-US Airways Inc.,1,3890.77027027
-US Airways Inc.,2,4764.74324324
-US Airways Inc.,3,4286.19444444
-US Airways Inc.,4,3591.22222222
-US Airways Inc.,5,3400.54166667
-US Airways Inc.,6,5507.77142857
-United Air Lines Inc.,1,6337.31168831
-United Air Lines Inc.,2,6291.81333333
-United Air Lines Inc.,3,7020.02666667
-United Air Lines Inc.,4,6329.73076923
-United Air Lines Inc.,5,8230.59459459
-United Air Lines Inc.,6,12517.164557
-United Air Lines Inc.,7,9950.01265823
-United Air Lines Inc.,8,7211.15
-United Air Lines Inc.,9,4015.0
-United Air Lines Inc.,10,4034.96470588
-Virgin America,1,2286.16666667
-Virgin America,2,3224.94444444
-Virgin America,3,3177.61111111
-Virgin America,4,2192.72222222
-Virgin America,5,3847.11764706
-Virgin America,6,3255.35294118
-Virgin America,7,3750.0
-Virgin America,8,3384.17647059
-Virgin America,9,1683.61111111
-Virgin America,10,2767.61111111
+carrier_name,month,delay_minutes_per_delayed_flight
+Alaska Airlines Inc.,10,52.0344396746
+Alaska Airlines Inc.,01,54.5028661162
+Alaska Airlines Inc.,02,57.0630874798
+Alaska Airlines Inc.,03,63.2972121494
+Alaska Airlines Inc.,04,48.2051989172
+Alaska Airlines Inc.,05,43.9910093151
+Alaska Airlines Inc.,06,57.0048162951
+Alaska Airlines Inc.,07,52.8246555479
+Alaska Airlines Inc.,08,51.7129443922
+Alaska Airlines Inc.,09,50.2793836698
+American Airlines Inc.,10,52.1103921657
+American Airlines Inc.,01,53.1353955811
+American Airlines Inc.,02,55.9322837275
+American Airlines Inc.,03,53.4730296449
+American Airlines Inc.,04,57.5424758766
+American Airlines Inc.,05,58.4901417902
+American Airlines Inc.,06,65.4959868506
+American Airlines Inc.,07,55.4992304431
+American Airlines Inc.,08,57.0953415772
+American Airlines Inc.,09,53.6304743746
+Delta Air Lines Inc.,10,52.5386455964
+Delta Air Lines Inc.,01,53.3482014267
+Delta Air Lines Inc.,02,53.5577520806
+Delta Air Lines Inc.,03,58.3105247699
+Delta Air Lines Inc.,04,55.876986475
+Delta Air Lines Inc.,05,61.1946897734
+Delta Air Lines Inc.,06,62.6819629133
+Delta Air Lines Inc.,07,53.610425458
+Delta Air Lines Inc.,08,56.224993046
+Delta Air Lines Inc.,09,54.9170321033
+Envoy Air,10,47.0248410532
+Envoy Air,01,58.3817955703
+Envoy Air,02,52.9186031481
+Envoy Air,03,52.1254940443
+Envoy Air,04,43.4259942124
+Envoy Air,05,49.3520104245
+Envoy Air,06,49.7148857023
+Envoy Air,07,50.2569989743
+Envoy Air,08,49.4396282085
+Envoy Air,09,48.4284619798
+ExpressJet Airlines Inc.,10,62.250534946
+ExpressJet Airlines Inc.,01,68.5244814868
+ExpressJet Airlines Inc.,02,64.5043810584
+ExpressJet Airlines Inc.,03,63.9542620617
+ExpressJet Airlines Inc.,04,64.6540781179
+ExpressJet Airlines Inc.,05,67.4325726649
+ExpressJet Airlines Inc.,06,70.452094865
+ExpressJet Airlines Inc.,07,65.3750648432
+ExpressJet Airlines Inc.,08,67.4385884556
+ExpressJet Airlines Inc.,09,60.868778481
+Frontier Airlines Inc.,10,57.3514937188
+Frontier Airlines Inc.,01,61.7894296427
+Frontier Airlines Inc.,02,68.633997444
+Frontier Airlines Inc.,03,58.3079872361
+Frontier Airlines Inc.,04,54.2444245909
+Frontier Airlines Inc.,05,58.1734739523
+Frontier Airlines Inc.,06,60.3863562192
+Frontier Airlines Inc.,07,59.2592211478
+Frontier Airlines Inc.,08,53.6350645475
+Frontier Airlines Inc.,09,63.7770782084
+Hawaiian Airlines Inc.,10,33.5315188995
+Hawaiian Airlines Inc.,01,35.9980183555
+Hawaiian Airlines Inc.,02,50.23100822
+Hawaiian Airlines Inc.,03,44.6336929003
+Hawaiian Airlines Inc.,04,46.977362847
+Hawaiian Airlines Inc.,05,48.0989461063
+Hawaiian Airlines Inc.,06,32.6164473036
+Hawaiian Airlines Inc.,07,39.9067842359
+Hawaiian Airlines Inc.,08,48.4417768005
+Hawaiian Airlines Inc.,09,40.5687650745
+JetBlue Airways,10,46.4751925856
+JetBlue Airways,01,55.0421685119
+JetBlue Airways,02,61.322766484
+JetBlue Airways,03,59.994109266
+JetBlue Airways,04,56.2122785425
+JetBlue Airways,05,59.3761125845
+JetBlue Airways,06,60.5010975797
+JetBlue Airways,07,59.2632617092
+JetBlue Airways,08,59.7388959872
+JetBlue Airways,09,54.0735138891
+SkyWest Airlines Inc.,10,55.9698754633
+SkyWest Airlines Inc.,01,69.7280478516
+SkyWest Airlines Inc.,02,65.3895702272
+SkyWest Airlines Inc.,03,59.246094576
+SkyWest Airlines Inc.,04,60.5906810582
+SkyWest Airlines Inc.,05,63.7486496807
+SkyWest Airlines Inc.,06,67.4865757362
+SkyWest Airlines Inc.,07,60.5896968055
+SkyWest Airlines Inc.,08,64.3663781498
+SkyWest Airlines Inc.,09,61.3656730741
+Southwest Airlines Co.,10,46.7749525516
+Southwest Airlines Co.,01,45.5184009728
+Southwest Airlines Co.,02,47.0464292236
+Southwest Airlines Co.,03,50.9711761241
+Southwest Airlines Co.,04,48.453570046
+Southwest Airlines Co.,05,51.4950922461
+Southwest Airlines Co.,06,54.7539162974
+Southwest Airlines Co.,07,54.1325931223
+Southwest Airlines Co.,08,53.6930880924
+Southwest Airlines Co.,09,46.9912429209
+Spirit Air Lines,10,54.9869140341
+Spirit Air Lines,01,49.6367444757
+Spirit Air Lines,02,62.0614121084
+Spirit Air Lines,03,60.5790228446
+Spirit Air Lines,04,46.1934127588
+Spirit Air Lines,05,57.9373453601
+Spirit Air Lines,06,75.5549939728
+Spirit Air Lines,07,52.275890746
+Spirit Air Lines,08,60.277181568
+Spirit Air Lines,09,59.7232075862
+US Airways Inc.,01,51.1840549097
+US Airways Inc.,02,56.7623137156
+US Airways Inc.,03,54.2910598391
+US Airways Inc.,04,56.2222661862
+US Airways Inc.,05,53.7405574822
+US Airways Inc.,06,57.1132207818
+United Air Lines Inc.,10,55.6561046426
+United Air Lines Inc.,01,49.7673640677
+United Air Lines Inc.,02,50.4659589029
+United Air Lines Inc.,03,51.492155384
+United Air Lines Inc.,04,51.4748257271
+United Air Lines Inc.,05,51.5882644407
+United Air Lines Inc.,06,60.547677641
+United Air Lines Inc.,07,60.4966115177
+United Air Lines Inc.,08,56.6732708631
+United Air Lines Inc.,09,52.8943358513
+Virgin America,10,55.0515605914
+Virgin America,01,47.9556702148
+Virgin America,02,50.314698905
+Virgin America,03,54.7023239376
+Virgin America,04,49.7038395736
+Virgin America,05,49.6921430978
+Virgin America,06,47.9250051005
+Virgin America,07,45.0825811059
+Virgin America,08,66.0724234739
+Virgin America,09,49.6563482353
